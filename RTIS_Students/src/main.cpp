@@ -197,11 +197,23 @@ void filteringAnImageExercise()
 
     // Filter-related variables
     // Declare here your filter-related variables
-    // (e.g., FILTER SIZE)
-    //(...)
-
+	int size;
+	size = 5;
+	int rad;
+	rad = (int)5 / 2;
+	int iterations = 10;
+	Film aux(resX, resY);
     // Implement here your image filtering algorithm
-    //(...)
+	for (int i = 0; i < iterations; i++) {
+		for (int lin = 0; lin < resX; lin++)
+		{
+			for (int col = 0; col < resY; col++)
+			{
+				Vector3D pos= f1.getPixelValue(lin, col);
+			}
+		}
+	}
+	
 
     // DO NOT FORGET TO SAVE YOUR IMAGE!
     //(...)
