@@ -1,0 +1,7 @@
+﻿  main.cpp
+c:\users\u114262\desktop\rtis_students\rtis_students\src\main.cpp(222): warning C4101: 'B': variable local sin referencia
+c:\users\u114262\desktop\rtis_students\rtis_students\src\main.cpp(220): warning C4101: 'roots': variable local sin referencia
+c:\users\u114262\desktop\rtis_students\rtis_students\src\main.cpp(222): warning C4101: 'A': variable local sin referencia
+c:\users\u114262\desktop\rtis_students\rtis_students\src\main.cpp(222): warning C4101: 'C': variable local sin referencia
+  RTIS.vcxproj -> C:\Users\u114262\Desktop\RTIS_Students\RTIS_Students\VisualStudio2015\x64\Debug\RTIS.exe
+  RTIS.vcxproj -> C:\Users\u114262\Desktop\RTIS_Students\RTIS_Students\VisualStudio2015\x64\Debug\RTIS.pdb (Partial PDB)
