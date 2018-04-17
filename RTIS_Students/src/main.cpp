@@ -197,23 +197,50 @@ void filteringAnImageExercise()
 
     // Filter-related variables
     // Declare here your filter-related variables
-	int size;
-	size = 5;
-	int rad;
-	rad = (int)5 / 2;
-	int iterations = 10;
-	Film aux(resX, resY);
+	int size, halfSize;
+	size = 9;
+	halfSize = ceil(size / 2)-1;
+	int iterations = 100;
+	Film *aux1,*aux2, *aux3;
+	aux1 = &f1;
+	aux2 = &f2;
+	Vector3D filter = Vector3D();
+	int avg;
+	avg= 0;
     // Implement here your image filtering algorithm
 	for (int i = 0; i < iterations; i++) {
 		for (int lin = 0; lin < resX; lin++)
 		{
 			for (int col = 0; col < resY; col++)
 			{
-				Vector3D pos= f1.getPixelValue(lin, col);
+
+				if (lin > halfSize && col > halfSize && lin<resX-halfSize && col<resY-halfSize){
+					for (int x = lin - halfSize; x <= lin + halfSize; x++) {
+						for (int y = col - halfSize; y <= col + halfSize; y++) {
+							filter +=aux1->getPixelValue(x,y);
+							avg += 1;
+						}
+					}
+					filter /= avg;
+					aux2->setPixelValue(lin, col, filter);
+					//aux->setPixelValue(lin, col, filter);
+					filter -= filter;
+					avg = 0;
+				}
+				else {
+					aux2->setPixelValue(lin, col, Vector3D(0,0,0));
+				}
+				
+				//Vector3D pos= f1.getPixelValue(lin, col);
 			}
 		}
+		aux3 = aux1;
+		aux1 = aux2;
+		aux2 = aux3;
+		//f1.clearData();
+		//aux.clearData();
 	}
-	
+	aux1->save();
 
     // DO NOT FORGET TO SAVE YOUR IMAGE!
     //(...)
