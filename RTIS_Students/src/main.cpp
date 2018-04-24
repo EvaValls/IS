@@ -200,7 +200,7 @@ void filteringAnImageExercise()
 	int const size = 5;
 	int halfSize;
 	halfSize = ceil(size / 2);
-	int iterations = 100;
+	int iterations = 900;
 	Film *aux1,*aux2, *aux3;
 	aux1 = &f1;
 	aux2 = &f2;
@@ -221,10 +221,15 @@ void filteringAnImageExercise()
 			for (int y = -halfSize; y <= halfSize; y++) {
 				//Gaussian equation
 				r = x*x + y*y;
-				kernel[x + halfSize][y + halfSize] =(exp(-r / s)) / ( 3.1415  * s);
+				kernel[x + halfSize][y + halfSize] =(exp(-r / s)) / (3.1415926535897  * s);
 				sum += kernel[x + halfSize][y + halfSize];
 			}
-		}	
+		}
+		for (int i = 0; i < size ; i++) {
+			for (int j = 0; j < size ; j++) {
+				kernel[i][j] /= sum;
+			}
+		}
 	} else { //If there is no gausian filter we will multiply by 1 (the identity)
 		for (int x = -halfSize; x <= halfSize; x++) {
 			for (int y = -halfSize; y <= halfSize; y++) {
@@ -258,7 +263,9 @@ void filteringAnImageExercise()
 					}
 					m++;
 				}
-				filter /= avg;
+				if (!gaussian) {//We only normalise if it isn't gaussian because the gaussian filet is alredy normalized
+					filter /= avg;
+				}
 				aux2->setPixelValue(lin, col, filter);
 				filter -= filter;
 				avg = 0;
