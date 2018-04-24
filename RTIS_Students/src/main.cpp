@@ -197,9 +197,9 @@ void filteringAnImageExercise()
 
     // Filter-related variables
     // Declare here your filter-related variables
-	int size, halfSize;
-	size = 9;
-	halfSize = ceil(size / 2)-1;
+	int const size = 5;
+	int halfSize;
+	halfSize = ceil(size / 2);
 	int iterations = 100;
 	Film *aux1,*aux2, *aux3;
 	aux1 = &f1;
@@ -207,43 +207,70 @@ void filteringAnImageExercise()
 	Vector3D filter = Vector3D();
 	int avg;
 	avg= 0;
-    // Implement here your image filtering algorithm
-	for (int i = 0; i < iterations; i++) {
-		for (int lin = 0; lin < resX; lin++)
-		{
-			for (int col = 0; col < resY; col++)
-			{
+	bool gaussian = false;
+	double kernel[size][size];
+	double sigma = 1.0;
+	double s = 2*sigma*sigma;
+	double sum = 0.0;
 
-				if (lin > halfSize && col > halfSize && lin<resX-halfSize && col<resY-halfSize){
-					for (int x = lin - halfSize; x <= lin + halfSize; x++) {
-						for (int y = col - halfSize; y <= col + halfSize; y++) {
-							filter +=aux1->getPixelValue(x,y);
+    // Implement here your image filtering algorithm
+
+	//Generating sizeXsize gaussian kernel
+	if (gaussian) {
+		for (int x = -halfSize; x <= halfSize; x++) {
+			for (int y = -halfSize; y <= halfSize; y++) {
+				//Gaussian equation
+				r = x*x + y*y;
+				kernel[x + halfSize][y + halfSize] =(exp(-r / s)) / ( 3.1415  * s);
+				sum += kernel[x + halfSize][y + halfSize];
+			}
+		}	
+	} else { //If there is no gausian filter we will multiply by 1 (the identity)
+		for (int x = -halfSize; x <= halfSize; x++) {
+			for (int y = -halfSize; y <= halfSize; y++) {
+	
+				kernel[x + halfSize][y + halfSize] = 1;
+			}
+		}
+	}
+
+	int m,n;
+
+	//Going thru the image
+	for (int i = 0; i < iterations; i++) {
+		///All the image
+		for (int lin = 0; lin < resX; lin++) {
+			for (int col = 0; col < resY; col++) {
+				///The size of the blur
+				m = 0;//Num of rows (x)
+				for (int x = lin - halfSize; x <= lin + halfSize; x++) {
+					n = 0; // num of cols(y)
+					for (int y = col - halfSize; y <= col + halfSize; y++) {
+							
+						if (x >= 0 && y >= 0 && x<resX && y<resY) {
+								
+
+							filter += aux1->getPixelValue(x, y)*kernel[m][n];
 							avg += 1;
+
 						}
+						n++;
 					}
-					filter /= avg;
-					aux2->setPixelValue(lin, col, filter);
-					//aux->setPixelValue(lin, col, filter);
-					filter -= filter;
-					avg = 0;
+					m++;
 				}
-				else {
-					aux2->setPixelValue(lin, col, Vector3D(0,0,0));
-				}
-				
-				//Vector3D pos= f1.getPixelValue(lin, col);
+				filter /= avg;
+				aux2->setPixelValue(lin, col, filter);
+				filter -= filter;
+				avg = 0;
 			}
 		}
 		aux3 = aux1;
 		aux1 = aux2;
 		aux2 = aux3;
-		//f1.clearData();
-		//aux.clearData();
+
 	}
 	aux1->save();
 
-    // DO NOT FORGET TO SAVE YOUR IMAGE!
-    //(...)
 }
 
 void completeSphereClassExercise()
