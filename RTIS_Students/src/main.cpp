@@ -230,7 +230,8 @@ void filteringAnImageExercise()
 				kernel[i][j] /= sum;
 			}
 		}
-	} else { //If there is no gausian filter we will multiply by 1 (the identity)
+	} else { 
+		//If there is no gausian filter we will multiply by 1 (the identity)
 		for (int x = -halfSize; x <= halfSize; x++) {
 			for (int y = -halfSize; y <= halfSize; y++) {
 	
@@ -263,7 +264,8 @@ void filteringAnImageExercise()
 					}
 					m++;
 				}
-				if (!gaussian) {//We only normalise if it isn't gaussian because the gaussian filet is alredy normalized
+				if (!gaussian) {
+					//We only normalise if it isn't gaussian because the gaussian filTeR is alreAdy normalized
 					filter /= avg;
 				}
 				aux2->setPixelValue(lin, col, filter);
@@ -283,7 +285,25 @@ void filteringAnImageExercise()
 void completeSphereClassExercise()
 {
     // Make your intersection tests here
-    // (....)
+	double radius = 1;
+
+	Vector3D delta(0, 0, 3);
+	Matrix4x4 objectToWorld = Matrix4x4::translate(delta);
+	Sphere sphere(radius, objectToWorld);
+
+	std::cout << "Sphere:"<< sphere << std::endl;
+
+	Vector3D origin(0,0,0);
+	Vector3D direction1(0, 0, 1);
+	Vector3D direction2(0, 1, 0);
+	Ray ray1(origin, direction1);
+	Ray ray2(origin, direction2);
+	bool hasRoots1 = sphere.rayIntersectP(ray1);
+	bool hasRoots2 = sphere.rayIntersectP(ray2);
+
+	std::cout << "Ray 1 intersects the sphere: " << hasRoots1 << std::endl;
+	std::cout << "Ray 2 intersects the sphere: " << hasRoots2 << std::endl;
+
 }
 
 void eqSolverExercise()
@@ -293,10 +313,12 @@ void eqSolverExercise()
 
     double A, B, C;
 
-    // (...)
+	A = 5.0;
+	B = 6;
+	C = 1;
 
 	bool hasRoots = true;
-    //bool hasRoots = solver.rootQuadEq(A, B, C, roots);
+    hasRoots = solver.rootQuadEq(A, B, C, roots);
 
     if(!hasRoots)
     {
@@ -305,7 +327,7 @@ void eqSolverExercise()
     else
     {
         // SHOW THE SOLUTIONS OF THE EQUATION
-        // (...)
+		std::cout << "Solution:" << roots.values[0] << ","<< roots.values[1] << std::endl;
     }
 }
 
@@ -316,7 +338,11 @@ void raytrace()
     resX = 512;
     resY = 512;
     Film film(resX, resY);
-
+	Ray ray;
+	double radius = 1;
+	Vector3D delta(0, 0, 3);
+	Matrix4x4 objectToWorld = Matrix4x4::translate(delta);
+	Sphere sphere(radius, objectToWorld);
     /* ******************* */
     /* Orthographic Camera */
     /* ******************* */
@@ -324,6 +350,18 @@ void raytrace()
                              // meaning that the camera space = world space
     OrtographicCamera camOrtho(cameraToWorld, film);
 
+	for (int lin = 0; lin < resX; lin++) {
+		for (int col = 0; col < resY; col++) {
+			ray = camOrtho.generateRay(lin, col);
+			bool intersects = sphere.rayIntersectP(ray);
+			if (intersects) {
+				film.setPixelValue(lin, col,Vector3D(1, 0, 0));
+			}
+			else {
+				film.setPixelValue(lin, col, Vector3D(0, 0, 0));
+			}
+		}
+	}
     /* ******************* */
     /* Perspective Camera */
     /* ******************* */
@@ -344,12 +382,12 @@ int main()
     //transformationsExercise();
     //normalTransformExercise();
     //paintingAnImageExercise();
-    filteringAnImageExercise();
+    //filteringAnImageExercise();
 
     // ASSIGNMENT 2
     //eqSolverExercise();
     //completeSphereClassExercise();
-    //raytrace();
+    raytrace();
 
     std::cout << "\n\n" << std::endl;
     return 0;

@@ -9,13 +9,11 @@ bool Sphere::rayIntersectP(const Ray &ray) const
     // Pass the ray to local coordinates
     Ray r = worldToObject.transformRay(ray);
 
-    std::cout << "PLEASE COMPLETE THE Sphere::rayIntersectP() FUNCTION!" << std::endl;
-
     // The ray-sphere intersection equation can be expressed in the
     // form A*t^2 + B*t + C = 0, where:
-    /*double A = ;
-    double B = ;
-    double C = ;
+    double A = r.d.x*r.d.x + r.d.y*r.d.y+ r.d.z*r.d.z;
+    double B = 2*(r.d.x*r.o.x + r.d.y*r.o.y+ r.d.z*r.o.z);
+    double C = r.o.x*r.o.x + r.o.y*r.o.y + r.o.z*r.o.z - radius*radius;
 
     // Now we need to solve this quadratic equation for t
     EqSolver solver;
@@ -25,7 +23,7 @@ bool Sphere::rayIntersectP(const Ray &ray) const
     if(!hasRoots)
     {
         return false;
-    }*/
+    }
 
     return true;
 }
