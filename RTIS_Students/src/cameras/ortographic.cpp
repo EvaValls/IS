@@ -27,5 +27,5 @@ Ray OrtographicCamera::generateRay(const double u, const double v) const
 
 	Ray ray(rOrig, rDir.normalized());
 
-    return ray;
+    return cameraToWorld.transformRay(ray);
 }

@@ -348,11 +348,11 @@ void raytrace()
     /* ******************* */
     Matrix4x4 cameraToWorld; // By default, this gives an ID transform
                              // meaning that the camera space = world space
-    OrtographicCamera camOrtho(cameraToWorld, film);
+	    OrtographicCamera camOrtho(cameraToWorld, film);
 
 	for (int lin = 0; lin < resX; lin++) {
 		for (int col = 0; col < resY; col++) {
-			ray = camOrtho.generateRay(lin, col);
+			ray = camOrtho.generateRay((lin+0.5)/resX, (col+0.5)/resY);
 			bool intersects = sphere.rayIntersectP(ray);
 			if (intersects) {
 				film.setPixelValue(lin, col,Vector3D(1, 0, 0));
