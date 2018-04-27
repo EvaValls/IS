@@ -30,9 +30,10 @@ Ray PerspectiveCamera::generateRay(const double u, const double v) const
     Vector3D imagePlanePoint = ndcToCameraSpace(u, v);
     Vector3D rOrig(0, 0, 0);
 
-    // COMPLETE THE REST OF THE FUNCTION
+	Vector3D rDir = imagePlanePoint - rOrig;
 
-    // Make sure the ray is normalized!
+	Ray ray(rOrig, rDir.normalized());
 
-    return Ray();
+	return cameraToWorld.transformRay(ray);
+
 }

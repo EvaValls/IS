@@ -333,6 +333,8 @@ void eqSolverExercise()
 
 void raytrace()
 {
+	std::string camType("ORTO"); //or ORTO or PRESP
+
     // Define the film (i.e., image) resolution
     size_t resX, resY;
     resX = 512;
@@ -343,16 +345,35 @@ void raytrace()
 	Vector3D delta(0, 0, 3);
 	Matrix4x4 objectToWorld = Matrix4x4::translate(delta);
 	Sphere sphere(radius, objectToWorld);
-    /* ******************* */
-    /* Orthographic Camera */
-    /* ******************* */
-    Matrix4x4 cameraToWorld; // By default, this gives an ID transform
-                             // meaning that the camera space = world space
-	    OrtographicCamera camOrtho(cameraToWorld, film);
+
+	Matrix4x4 cameraToWorld; // By default, this gives an ID transform
+							 // meaning that the camera space = world space
+	Camera *camera;
+	if (camType == "ORTO") {
+		/* ******************* */
+		/* Orthographic Camera */
+		/* ******************* */
+
+		OrtographicCamera camOrth(cameraToWorld, film);
+		camera = &camOrth;
+	}
+	else{
+		/* ******************* */
+		/* Perspective Camera  */
+		/* ******************* */
+
+		double fovRadians = Utils::degreesToRadians(60);
+		PerspectiveCamera camPresp(cameraToWorld, fovRadians, film);
+		camera = &camPresp;
+	}
+
+
+   
+	//OrtographicCamera camOrtho(cameraToWorld, film);
 
 	for (int lin = 0; lin < resX; lin++) {
 		for (int col = 0; col < resY; col++) {
-			ray = camOrtho.generateRay((lin+0.5)/resX, (col+0.5)/resY);
+			ray = camera->generateRay((lin+0.5)/resX, (col+0.5)/resY);
 			bool intersects = sphere.rayIntersectP(ray);
 			if (intersects) {
 				film.setPixelValue(lin, col,Vector3D(1, 0, 0));
@@ -362,11 +383,8 @@ void raytrace()
 			}
 		}
 	}
-    /* ******************* */
-    /* Perspective Camera */
-    /* ******************* */
-    double fovRadians = Utils::degreesToRadians(60);
-    PerspectiveCamera camPersp(cameraToWorld, fovRadians, film);
+
+
 
     // Save the final result to file
     film.save();
