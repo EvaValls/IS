@@ -14,6 +14,10 @@
 #include "cameras/perspective.h"
 
 #include "shaders/intersectionshader.h"
+#include "shaders/depthshader.h"
+
+#include "materials/material.h"
+#include "materials/phongmaterial.h"
 
 void buildSceneSphere(Camera* &cam, Film* &film,
                       std::vector<Shape*>* &objectsList,
@@ -33,9 +37,9 @@ void buildSceneSphere(Camera* &cam, Film* &film,
     /* ************************** */
     /* DEFINE YOUR MATERIALS HERE */
     /* ************************** */
-    // (...)
-    //  EXAMPLE:  Material *green_50 = new Phong (Vector3D(0.2, 0.7, 0.3), Vector3D(0.2, 0.6, 0.2), 50);
-
+   
+     Material *green_50 = new PhongMaterial(Vector3D(0.2, 0.7, 0.3), Vector3D(0.2, 0.6, 0.2), 50);
+	 Material *green_10 = new PhongMaterial(Vector3D(0.2, 0.7, 0.3), Vector3D(0.2, 0.6, 0.2), 10);
 
     /* ******* */
     /* Objects */
@@ -47,12 +51,12 @@ void buildSceneSphere(Camera* &cam, Film* &film,
     // Define and place a sphere
     Matrix4x4 sphereTransform1;
     sphereTransform1 = sphereTransform1.translate(Vector3D(-1.0, -0.5, 2*std::sqrt(2.0)));
-    Shape *s1 = new Sphere (0.25, sphereTransform1, NULL);
+    Shape *s1 = new Sphere (0.25, sphereTransform1, green_50);
 
     // Define and place a sphere
     Matrix4x4 sphereTransform2;
     sphereTransform2 = sphereTransform2.translate(Vector3D(1.0, 0.0, 6));
-    Shape *s2 = new Sphere (1, sphereTransform2, NULL);
+    Shape *s2 = new Sphere (1, sphereTransform2, green_10);
 
     // Define and place a sphere
     Matrix4x4 sphereTransform3;
@@ -70,10 +74,11 @@ void buildSceneSphere(Camera* &cam, Film* &film,
     /* ****** */
     //
     // ADD YOUR LIGHT SOURCES HERE
-    // (...)
+	PointLightSource light1(Vector3D(0, 1, 0), Vector3D(0, 0, 1));
     //
     // DO NOT FORGET TO STORE THE LIGHT SOURCES IN THE "lightSourceList"
-    // (...)
+	lightSourceList = new std::vector<PointLightSource>;
+	lightSourceList->push_back(light1);
     //
 }
 
@@ -126,7 +131,8 @@ int main()
     // Declare the shader
     Vector3D bgColor(0.0, 0.0, 0.0); // Background color (for rays which do not intersect anything)
     Vector3D intersectionColor(1,0,0);
-    Shader *shader = new IntersectionShader (intersectionColor, bgColor);
+    //Shader *shader = new IntersectionShader (intersectionColor, bgColor);
+	Shader *shader = new DepthShader(Vector3D(0.4, 1, 0.4), 8, bgColor);
 
     // Declare pointers to all the variables which describe the scene
     Camera *cam;

@@ -6,6 +6,7 @@ DepthShader::DepthShader(Vector3D color_, double maxDist_, Vector3D bgColor_)
 
 Vector3D DepthShader::computeColor(const Ray &r, const std::vector<Shape*> &objList, 
 									const std::vector<PointLightSource> &lsList) const {
+	Vector3D newColor = Shader::bgColor;
 	for (size_t objIndex = 0; objIndex < objList.size(); objIndex++)
 	{
 		// Get the current object
@@ -17,12 +18,12 @@ Vector3D DepthShader::computeColor(const Ray &r, const std::vector<Shape*> &objL
 			Vector3D d = r.o - its.itsPoint;
 			double dist = sqrt(d.x* d.x + d.y* d.y + d.z*d.z);
 			if (dist < maxDist) {
-				return color*(1.0 - dist / maxDist);
+				newColor = color*(1.0 - dist / maxDist);
 			}
 		} 
 
 	}
 
-	return bgColor_;
+	return newColor;
 }
 
