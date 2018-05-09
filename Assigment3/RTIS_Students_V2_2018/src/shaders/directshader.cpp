@@ -34,7 +34,10 @@ Vector3D DirectShader::computeColor(const Ray &r, const std::vector<Shape*> &obj
 			//Light direction
 			Vector3D wi = (ls.getPosition()- its.itsPoint);
 			Vector3D rf = pm->getReflectance(its.normal.normalized(), wo.normalized(), wi.normalized());
-			Lo += Vector3D(I.x*rf.x, I.y*rf.y, I.z*rf.z);
+			if (dot(its.normal, wi) > 0) {
+				Lo += Utils::multiplyPerCanal(I, rf);
+			}
+			
 		}
 
 	}
