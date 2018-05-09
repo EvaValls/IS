@@ -20,9 +20,9 @@ Vector3D PhongMaterial::getReflectance(const Vector3D &normal, const Vector3D &w
 	Vector3D rs  =ks * pow(wowr, n);
 
 	//total reflectance
-	//Vector3D r = rd + rs;
+
 	Vector3D r = rd+rs;
-	//Vector3D r = rs;
+
 	return r;
 }
 

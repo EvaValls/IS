@@ -9,6 +9,7 @@
 #include "core/utils.h"
 
 #include "shapes/sphere.h"
+#include "shapes/infiniteplane.h"
 
 #include "cameras/ortographic.h"
 #include "cameras/perspective.h"
@@ -42,6 +43,7 @@ void buildSceneSphere(Camera* &cam, Film* &film,
 	Material *green_50 = new PhongMaterial(Vector3D(0.2, 0.7, 0.3), Vector3D(0.2, 0.7, 0.3), 50);
 	Material *purple_100 = new PhongMaterial(Vector3D(.305, .062, .698), Vector3D(.305, .062, .698), 100);
 	Material *pink_50 = new PhongMaterial(Vector3D(.976, .062, .843), Vector3D(.976, .062, .843),50);
+	Material *greyDiffuse = new PhongMaterial(Vector3D(0.8, 0.8, 0.8), Vector3D(0, 0, 0), 100);
 
     /* ******* */
     /* Objects */
@@ -65,11 +67,14 @@ void buildSceneSphere(Camera* &cam, Film* &film,
     sphereTransform3 = sphereTransform3.translate(Vector3D(0.3, -0.75, 3.5));
     Shape *s3 = new Sphere (0.25, sphereTransform3, pink_50);
 
+	//Define and place infinite plane
+	double offset = 3.0;
+	Shape *bottomPlan = new InfinitePlane(Vector3D(0, -offset, 0), Vector3D(0, 1, 0), greyDiffuse);
     // Store the objects in the object list
     objectsList->push_back(s1);
     objectsList->push_back(s2);
     objectsList->push_back(s3);
-
+	objectsList->push_back(bottomPlan);
 
     /* ****** */
     /* Lights */
