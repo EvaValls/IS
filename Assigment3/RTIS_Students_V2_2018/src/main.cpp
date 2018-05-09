@@ -39,9 +39,9 @@ void buildSceneSphere(Camera* &cam, Film* &film,
     /* DEFINE YOUR MATERIALS HERE */
     /* ************************** */
    
-     Material *green_50 = new PhongMaterial(Vector3D(0.2, 0.6, 0.2), Vector3D(0.2, 0.6, 0.2), 50);
-	 Material *blue_50 = new PhongMaterial(Vector3D(0.1,0.1 ,1), Vector3D(0.1, 0.1, 1), 20);
-	 Material *rose_50 = new PhongMaterial(Vector3D(1, 0.8, 0), Vector3D(1, 0.8, 0), 20);
+     Material *green_50 = new PhongMaterial(Vector3D(1, 0.6, 0.2), Vector3D(1, 0.6, 0.2), 10);
+	 Material *blue_50 = new PhongMaterial(Vector3D(0.8,0.8 ,1), Vector3D(0.1, 0.1, 1), 10);
+	 Material *rose_50 = new PhongMaterial(Vector3D(1, 0.8, 0.5), Vector3D(0, 1, 1), 10);
 
     /* ******* */
     /* Objects */
@@ -76,8 +76,8 @@ void buildSceneSphere(Camera* &cam, Film* &film,
     /* ****** */
     //
     // ADD YOUR LIGHT SOURCES HERE
-	PointLightSource light1(Vector3D(0, 0, 5), Vector3D(0.4, 0.3, 0.1));
-	//PointLightSource light2(Vector3D(0, 0.8, 0), Vector3D(0.6, 1, 1));
+	PointLightSource light1(Vector3D(0, 0,5), Vector3D(0.4, 0.3, 0.1));
+	//PointLightSource light2(Vector3D(0, 1, 0), Vector3D(0.6, 1, 1));
     //
     // DO NOT FORGET TO STORE THE LIGHT SOURCES IN THE "lightSourceList"
 	lightSourceList = new std::vector<PointLightSource>;

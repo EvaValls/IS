@@ -8,29 +8,35 @@ DirectShader::DirectShader(Vector3D color_, double maxDist_, Vector3D bgColor_)
 
 Vector3D DirectShader::computeColor(const Ray &r, const std::vector<Shape*> &objList,
 	const std::vector<PointLightSource> &lsList) const {
-	int V = 0;
-	Vector3D wo = r.o;
-	Vector3D Lo(0, 0, 0);
-	for (size_t objIndex = 0; objIndex < objList.size(); objIndex++)
-	{
-		// Get the current object
-		Intersection its;
-		const Shape *obj = objList.at(objIndex);
-		bool intersects = obj->rayIntersect(r, its);
 	
-		if (intersects) {
+	Vector3D Lo = bgColor;
+
+	// Get the current object
+	Intersection its;
+
+	bool intersects = Utils::getClosestIntersection(r, objList, its); 
+
+	if (intersects) {
+		//Viewing direction
+		Vector3D wo = -r.d;
+
+		//Phong Material of the object 
+		const Material *m = &its.shape->getMaterial();
+
+		const PhongMaterial* pm = dynamic_cast<const PhongMaterial*>(m);
+
+		for (int lsIndex = 0; lsIndex < lsList.size(); lsIndex++) {
 			
-			for (int lsIndex = 0; lsIndex < lsList.size(); lsIndex++) {
-				const PointLightSource ls = lsList.at(lsIndex);
-				Vector3D I = ls.getIntensity(its.itsPoint);
-				Vector3D wi = ls.getPosition();
-				const Material *m = &obj->getMaterial();
-				const PhongMaterial* pm = dynamic_cast<const PhongMaterial*>(m);
-				//PhongMaterial phong = &m;
-				Vector3D rf = pm->getReflectance(its.normal, wo, wi);
-				Lo += Vector3D(I.x*rf.x, I.y*rf.y, I.z*rf.z);
-			}
+			//Light source
+			const PointLightSource ls = lsList.at(lsIndex);
+			Vector3D I = ls.getIntensity(its.itsPoint);
+
+			//Light direction
+			Vector3D wi = (ls.getPosition()- its.itsPoint);
+			Vector3D rf = pm->getReflectance(its.normal.normalized(), wo.normalized(), wi.normalized());
+			Lo += Vector3D(I.x*rf.x, I.y*rf.y, I.z*rf.z);
 		}
+
 	}
 	
 	return Lo;

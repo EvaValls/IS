@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "../core/ray.h"
+#include "../core/utils.h"
 #include "../lightsources/pointlightsource.h"
 #include "../shapes/shape.h"
 #include "../lightsources/pointlightsource.h"
