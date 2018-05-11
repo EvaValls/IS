@@ -13,13 +13,13 @@ Vector3D DirectShader::computeColor(const Ray &r, const std::vector<Shape*> &obj
 
 	// Get the current object
 	Intersection its;
-
+	
 	bool intersects = Utils::getClosestIntersection(r, objList, its); 
 
 	if (intersects) {
 		//Viewing direction
 		Vector3D wo = -r.d;
-
+		
 		//Phong Material of the object 
 		const Material *m = &its.shape->getMaterial();
 
@@ -33,13 +33,13 @@ Vector3D DirectShader::computeColor(const Ray &r, const std::vector<Shape*> &obj
 
 			//Light direction
 			Vector3D wi = (ls.getPosition()- its.itsPoint);
+			Ray rShadow(its.itsPoint, wi.normalized());
+			rShadow.maxT = wi.length();
 			Vector3D rf = pm->getReflectance(its.normal.normalized(), wo.normalized(), wi.normalized());
-			if (dot(its.normal, wi) > 0) {
+			if (dot(its.normal, wi) > 0&& !Utils::hasIntersection(rShadow, objList)) {
 				Lo += Utils::multiplyPerCanal(I, rf);
 			}
-			
 		}
-
 	}
 	
 	return Lo;

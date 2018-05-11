@@ -49,7 +49,7 @@ bool InfinitePlane::rayIntersect(const Ray &rayWorld, Intersection &its) const
 		return false;
 
     // Compute ray/plane the intersection point
-	Vector3D pHit = rayWorld.o + tHit*denominator;
+	Vector3D pHit = rayWorld.o +rayWorld.d * tHit;
 
     // Fill the intersection details
 	its.itsPoint = pHit;
