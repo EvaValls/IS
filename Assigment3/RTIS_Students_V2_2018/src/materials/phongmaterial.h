@@ -14,7 +14,7 @@ public:
 		const Vector3D &wi) const ;
 	virtual bool hasSpecular() const { return false; };
 	virtual bool hasTransmission() const { return false; };
-	virtual bool hasDiffuseOrGlossy() const { return false; };
+	virtual bool hasDiffuseOrGlossy() const { return true; };
 	virtual double getIndexOfRefraction() const { return false; };
 
 private:

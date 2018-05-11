@@ -20,6 +20,7 @@
 
 #include "materials/material.h"
 #include "materials/phongmaterial.h"
+#include "materials\mirrormaterial.h"
 
 void buildSceneSphere(Camera* &cam, Film* &film,
                       std::vector<Shape*>* &objectsList,
@@ -45,7 +46,7 @@ void buildSceneSphere(Camera* &cam, Film* &film,
 	Material *greyDiffuse = new PhongMaterial(Vector3D(0, 0, 0), Vector3D(0.8, 0.8, 0.8), 100);
 	Material *blueDiffuse = new PhongMaterial(Vector3D(0, 0, 0), Vector3D(0.3, 0.2, 0.7), 100);
 	Material *transmissive = new PhongMaterial(Vector3D(1, 1, 0.2), Vector3D(1, 1, 0.2), 20);
-	Material *mirror = new PhongMaterial(Vector3D(0.0, 0.9, 0.9), Vector3D(0.1, 0.9, 0.9), 50);
+	Material *mirror = new MirrorMaterial(Vector3D(1, 0.9, 0.85));
 	Material *red_100 = new PhongMaterial(Vector3D(0.7, 0.2, 0.3), Vector3D(0.7, 0.2, 0.3), 100);
 
 
