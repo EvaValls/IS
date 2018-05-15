@@ -30,12 +30,49 @@ Vector3D DirectShader::computeColor(const Ray &r, const std::vector<Shape*> &obj
 		bool transmission = its.shape->getMaterial().hasTransmission();
 
 		if (specular) {
-			const Material *m = &its.shape->getMaterial();
+			//const Material *m = &its.shape->getMaterial();
 
-			const TransmissiveMaterial* mm = dynamic_cast<const TransmissiveMaterial*>(m);
+			//const TransmissiveMaterial* mm = dynamic_cast<const TransmissiveMaterial*>(m);
 			Vector3D wr = Utils::computeReflectionDirection(r.d, its.normal);
 			Ray reflectionRay(its.itsPoint, wr.normalized(), r.depth+1);
 			Lo = computeColor(reflectionRay, objList, lsList);
+		}
+		if (transmission) {
+			//const Material *m = &its.shape->getMaterial();
+			
+
+			
+		
+				
+			//Compute eta coeffs
+			double eta2= its.shape->getMaterial().getIndexOfRefraction();
+			double eta1 = 1;
+			double eta = eta2/eta1;
+
+			//computing wt
+			double cosThetaI = dot(r.d, -its.normal);
+			Vector3D n;
+			if (cosThetaI < 0) {
+				n = -its.normal;
+				eta = eta1 / eta2;
+			}
+			else
+				n = its.normal;
+			double cosThetaT;
+			bool hasTotalReflection = Utils::isTotalInternalReflection(eta, cosThetaI, cosThetaT);
+
+			if (hasTotalReflection) {
+				Vector3D wr = Utils::computeReflectionDirection(r.d, n);
+				Ray reflectionRay(its.itsPoint, wr.normalized(), r.depth + 1);
+				Lo = computeColor(reflectionRay, objList, lsList);
+			}
+			else {
+				Ray transRay(its.itsPoint, r.d.normalized());
+				Vector3D wt = Utils::computeTransmissionDirection(transRay, n, eta, cosThetaI, cosThetaT);
+				Ray refracRay(its.itsPoint, wt.normalized(), r.depth + 1);
+				Lo += computeColor(refracRay, objList, lsList);
+			}
+			
 		}
 		if(diffuse)
 		{

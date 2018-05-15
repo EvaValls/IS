@@ -46,7 +46,7 @@ void buildSceneSphere(Camera* &cam, Film* &film,
 	Material *greenDiffuse = new PhongMaterial(Vector3D(0, 0, 0), Vector3D(0.2, 0.7, 0.3), 100);
 	Material *greyDiffuse = new PhongMaterial(Vector3D(0, 0, 0), Vector3D(0.8, 0.8, 0.8), 100);
 	Material *blueDiffuse = new PhongMaterial(Vector3D(0, 0, 0), Vector3D(0.3, 0.2, 0.7), 100);
-	Material *transmissive = new TransmissiveMaterial(80, Vector3D(1, 1, 0.2));
+	Material *transmissive = new TransmissiveMaterial(1.1, Vector3D(1, 1, 1));
 	Material *mirror = new MirrorMaterial(Vector3D(1, 0.9, 0.85));
 	Material *red_100 = new PhongMaterial(Vector3D(0.7, 0.2, 0.3), Vector3D(0.7, 0.2, 0.3), 100);
 
