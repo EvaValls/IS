@@ -1,6 +1,7 @@
 #include "../materials/phongmaterial.h"
 #include "directshader.h"
 #include "../materials/mirrormaterial.h"
+#include "../materials/transmissivematerial.h"
 
 DirectShader::DirectShader(Vector3D color_, double maxDist_, Vector3D bgColor_)
 	:Shader(bgColor_), maxDist(maxDist_), color(color_)
@@ -31,7 +32,7 @@ Vector3D DirectShader::computeColor(const Ray &r, const std::vector<Shape*> &obj
 		if (specular) {
 			const Material *m = &its.shape->getMaterial();
 
-			const MirrorMaterial* mm = dynamic_cast<const MirrorMaterial*>(m); 
+			const TransmissiveMaterial* mm = dynamic_cast<const TransmissiveMaterial*>(m);
 			Vector3D wr = Utils::computeReflectionDirection(r.d, its.normal);
 			Ray reflectionRay(its.itsPoint, wr.normalized(), r.depth+1);
 			Lo = computeColor(reflectionRay, objList, lsList);
