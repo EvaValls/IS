@@ -26,12 +26,7 @@ Vector3D PhongMaterial::getReflectance(const Vector3D &normal, const Vector3D &w
 	return r;
 }
 
-/*bool PhongMaterial::hasSpecular() const {
-	if (ks != Vector3D(0,0,0)) {
-		return true;
-	}
-	return false;
+Vector3D PhongMaterial::getDiffuseCoefficient() const
+{
+	return kd;
 }
-virtual bool hasTransmission() const = 0;
-virtual bool hasDiffuseOrGlossy() const = 0;
-virtual double getIndexOfRefraction() const;*/

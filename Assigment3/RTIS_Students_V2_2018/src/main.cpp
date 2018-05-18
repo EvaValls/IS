@@ -17,6 +17,9 @@
 #include "shaders/intersectionshader.h"
 #include "shaders/depthshader.h"
 #include "shaders/directshader.h"
+#include "shaders\globalshader.h"
+#include "shaders/directshader.h"
+
 
 #include "materials/material.h"
 #include "materials/phongmaterial.h"
@@ -42,10 +45,10 @@ void buildSceneSphere(Camera* &cam, Film* &film,
     /* DEFINE YOUR MATERIALS HERE */
     /* ************************** */
    
-	Material *redDiffuse = new PhongMaterial(Vector3D(0, 0, 0), Vector3D(0.7, 0.2, 0.3), 100);
-	Material *greenDiffuse = new PhongMaterial(Vector3D(0, 0, 0), Vector3D(0.2, 0.7, 0.3), 100);
-	Material *greyDiffuse = new PhongMaterial(Vector3D(0, 0, 0), Vector3D(0.8, 0.8, 0.8), 100);
-	Material *blueDiffuse = new PhongMaterial(Vector3D(0, 0, 0), Vector3D(0.3, 0.2, 0.7), 100);
+	Material *redDiffuse = new PhongMaterial(Vector3D(0.7, 0.2, 0.3), Vector3D(0.7, 0.2, 0.3), 100);
+	Material *greenDiffuse = new PhongMaterial(Vector3D(0.2, 0.7, 0.3), Vector3D(0.2, 0.7, 0.3), 100);
+	Material *greyDiffuse = new PhongMaterial(Vector3D(0.8, 0.8, 0.8), Vector3D(0.8, 0.8, 0.8), 100);
+	Material *blueDiffuse = new PhongMaterial(Vector3D(0.3, 0.2, 0.7), Vector3D(0.3, 0.2, 0.7), 100);
 	Material *transmissive = new TransmissiveMaterial(1.1, Vector3D(1, 1, 1));
 	Material *mirror = new MirrorMaterial(Vector3D(1, 0.9, 0.85));
 	Material *red_100 = new PhongMaterial(Vector3D(0.7, 0.2, 0.3), Vector3D(0.7, 0.2, 0.3), 100);
@@ -167,7 +170,8 @@ int main()
     Vector3D intersectionColor(1,0,0);
     //Shader *shader = new IntersectionShader (intersectionColor, bgColor);
 	//Shader *shader = new DepthShader(Vector3D(0.4, 1, 0.4), 8, bgColor);
-	Shader *shader = new DirectShader(Vector3D(0.4, 1, 0.4), 8, bgColor);
+	//Shader *shader = new DirectShader(Vector3D(0.4, 1, 0.4), 8, bgColor);
+	Shader *shader = new GlobalShader(Vector3D(0.5, 0.5,0.5), 8, bgColor);
 
     // Declare pointers to all the variables which describe the scene
     Camera *cam;

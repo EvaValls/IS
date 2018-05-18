@@ -4,6 +4,7 @@
 #include "material.h"
 #include "../core/vector3d.h"
 
+
 class PhongMaterial: public Material
 {
 public:
@@ -16,6 +17,7 @@ public:
 	virtual bool hasTransmission() const { return false; };
 	virtual bool hasDiffuseOrGlossy() const { return true; };
 	virtual double getIndexOfRefraction() const { return false; };
+	virtual Vector3D getDiffuseCoefficient() const;
 
 private:
 	Vector3D ks;
