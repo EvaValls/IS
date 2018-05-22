@@ -3,7 +3,7 @@
 Triangle::Triangle(const Vector3D &pA_, const Vector3D &pB_, const Vector3D &pC_,
 	Material *mat_) :
 	Shape(Matrix4x4(), mat_),
-	pAWorld(pA_), pBWorld(pB_), pCWorld(pC_), nWorld(cross(pA_-pB_,pA_-pC_))
+	pAWorld(pA_), pBWorld(pB_), pCWorld(pC_), nWorld(cross(pA_-pB_,pA_-pC_).normalized())
 { }
 
 Vector3D Triangle::getNormalWorld() const
@@ -34,15 +34,17 @@ bool Triangle::rayIntersectP(const Ray &rayWorld) const
 	//(vecAB x vecAPhit)*normal>0
 	Vector3D vecAB = pAWorld - pBWorld;
 	Vector3D vecApHit = pAWorld - pHit;
-	Vector3D vecBC = pBWorld - pCWorld;
-	Vector3D vecBpHit = pBWorld - pHit;
-	Vector3D vecCA = pCWorld - pAWorld;
-	Vector3D vecCpHit = pBWorld - pHit;
 
 	if(dot(cross(vecAB, vecApHit), nWorld)<0)
 		return false;
+
+	Vector3D vecBC = pBWorld - pCWorld;
+	Vector3D vecBpHit = pBWorld - pHit;
 	if (dot(cross(vecBC, vecBpHit), nWorld)<0)
 		return false;
+
+	Vector3D vecCA = pCWorld - pAWorld;
+	Vector3D vecCpHit = pBWorld - pHit;
 	if (dot(cross(vecCA, vecCpHit), nWorld)<0)
 		return false;
 
@@ -73,15 +75,19 @@ bool Triangle::rayIntersect(const Ray &rayWorld, Intersection &its) const
 	//(vecAB x vecAPhit)*normal>0
 	Vector3D vecAB = pAWorld - pBWorld;
 	Vector3D vecApHit = pAWorld - pHit;
-	Vector3D vecBC = pBWorld - pCWorld;
-	Vector3D vecBpHit = pBWorld - pHit;
-	Vector3D vecCA = pCWorld - pAWorld;
-	Vector3D vecCpHit = pCWorld - pHit;
 
 	if (dot(cross(vecAB, vecApHit), nWorld)<0)
 		return false;
+
+	Vector3D vecBC = pBWorld - pCWorld;
+	Vector3D vecBpHit = pBWorld - pHit;
+
 	if (dot(cross(vecBC, vecBpHit), nWorld)<0)
 		return false;
+
+	Vector3D vecCA = pCWorld - pAWorld;
+	Vector3D vecCpHit = pCWorld - pHit;
+
 	if (dot(cross(vecCA, vecCpHit), nWorld)<0)
 		return false;
 

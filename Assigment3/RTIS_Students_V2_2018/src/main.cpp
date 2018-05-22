@@ -46,9 +46,9 @@ void buildSceneSphere(Camera* &cam, Film* &film,
     /* DEFINE YOUR MATERIALS HERE */
     /* ************************** */
    
-	Material *redDiffuse = new PhongMaterial(Vector3D(0.7, 0.2, 0.3), Vector3D(0.7, 0.2, 0.3), 100);
-	Material *greenDiffuse = new PhongMaterial(Vector3D(0.2, 0.7, 0.3), Vector3D(0.2, 0.7, 0.3), 100);
-	Material *greyDiffuse = new PhongMaterial(Vector3D(0.8, 0, 0), Vector3D(0.8, 0.8, 0.8), 100);
+	Material *redDiffuse = new PhongMaterial(Vector3D(0, 0, 0), Vector3D(0.7, 0.2, 0.3), 100);
+	Material *greenDiffuse = new PhongMaterial(Vector3D(0, 0, 0), Vector3D(0.2, 0.7, 0.3), 100);
+	Material *greyDiffuse = new PhongMaterial(Vector3D(0, 0, 0), Vector3D(0.8, 0.8, 0.8), 100);
 	Material *blueDiffuse = new PhongMaterial(Vector3D(0, 0, 0), Vector3D(0.3, 0.2, 0.7), 100);
 	Material *transmissive = new TransmissiveMaterial(1.1, Vector3D(1, 1, 1));
 	Material *mirror = new MirrorMaterial(Vector3D(1, 0.9, 0.85));
@@ -87,11 +87,13 @@ void buildSceneSphere(Camera* &cam, Film* &film,
 	//Define and place infinite plane
 	Matrix4x4 idTransform;
 	// Construct the Cornell Box
+	
 	Shape *leftPlan = new InfinitePlane(Vector3D(-offset, 0, 0), Vector3D(1, 0, 0), redDiffuse);
 	Shape *rightPlan = new InfinitePlane(Vector3D(offset, 0, 0), Vector3D(-1, 0, 0), greenDiffuse);
 	Shape *topPlan = new InfinitePlane(Vector3D(0, offset, 0), Vector3D(0, -1, 0), greyDiffuse);
 	Shape *bottomPlan = new InfinitePlane(Vector3D(0, -offset, 0), Vector3D(0, 1, 0), greyDiffuse);
 	Shape *backPlan = new InfinitePlane(Vector3D(0, 0, 3 * offset), Vector3D(0, 0, -1), blueDiffuse);
+
 	objectsList->push_back(leftPlan);
 	objectsList->push_back(rightPlan);
 	objectsList->push_back(topPlan);
@@ -105,11 +107,11 @@ void buildSceneSphere(Camera* &cam, Film* &film,
     /* ****** */
     //
     // ADD YOUR LIGHT SOURCES HERE
-	Vector3D lightPosition1 = Vector3D(0, offset - 1, 2 * offset);
+Vector3D lightPosition1 = Vector3D(0, offset - 1, 2 * offset);
 	Vector3D lightPosition2 = Vector3D(0, offset - 1, 0);
 	Vector3D lightPosition3 = Vector3D(0, offset - 1, offset);
 
-	Vector3D intensity = Vector3D(10, 10, 10); // Radiant intensity (watts/sr)
+	Vector3D intensity = Vector3D(5, 5, 5); // Radiant intensity (watts/sr)
 	PointLightSource pointLS1(lightPosition1, intensity);
 	PointLightSource pointLS2(lightPosition2, intensity);
 	PointLightSource pointLS3(lightPosition3, intensity);
