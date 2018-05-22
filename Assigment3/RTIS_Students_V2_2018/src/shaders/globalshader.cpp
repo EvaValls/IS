@@ -69,7 +69,7 @@ Vector3D GlobalShader::computeColor(const Ray &r, const std::vector<Shape*> &obj
 		}
 		if (diffuse)
 		{
-			int nSamples = 5;
+			int nSamples = 1;
 			int bounces = maxDist;
 			Vector3D at = color;
 
