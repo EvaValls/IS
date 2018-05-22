@@ -13,66 +13,89 @@ Vector3D Triangle::getNormalWorld() const
 
 bool Triangle::rayIntersectP(const Ray &rayWorld) const
 {
-	//// Compute the denominator of the tHit formula
-	//double denominator = dot(rayWorld.d, nWorld);
+	// Compute the denominator of the tHit formula
+	double denominator = dot(rayWorld.d, nWorld);
 
-	//// If the denominator is very close to zero, then the ray and the
-	//// plane are almost parallel
-	//if (std::abs(denominator) < Epsilon)
-	//	return false;
+	// If the denominator is very close to zero, then the ray and the
+	// plane are almost parallel
+	if (std::abs(denominator) < Epsilon)
+		return false;
 
-	//// Effectivelly compute the intersection point
-	//double tHit = dot((p0World - rayWorld.o), nWorld) / denominator;
+	// Effectivelly compute the intersection point
+	double tHit = dot((pAWorld - rayWorld.o), nWorld) / denominator;
 
-	//// Is tHit outside the bounds of the ray segment we want to test intersecion with?
-	//if (tHit < rayWorld.minT || tHit > rayWorld.maxT)
-	//	return false;
+	// Is tHit outside the bounds of the ray segment we want to test intersecion with?
+	if (tHit < rayWorld.minT || tHit > rayWorld.maxT)
+		return false;
+	// Compute ray/plane the intersection point
+	Vector3D pHit = rayWorld.o + rayWorld.d * tHit;
 
-	//// Arriving here, we know that the ray segment intersects the plan
-	//return true;
+	//To compute if the intersection is inside the triangle we assume the formula: 
+	//(vecAB x vecAPhit)*normal>0
+	Vector3D vecAB = pAWorld - pBWorld;
+	Vector3D vecApHit = pAWorld - pHit;
+	Vector3D vecBC = pBWorld - pCWorld;
+	Vector3D vecBpHit = pBWorld - pHit;
+	Vector3D vecCA = pCWorld - pAWorld;
+	Vector3D vecCpHit = pBWorld - pHit;
+
+	if(dot(cross(vecAB, vecApHit), nWorld)<0)
+		return false;
+	if (dot(cross(vecBC, vecBpHit), nWorld)<0)
+		return false;
+	if (dot(cross(vecCA, vecCpHit), nWorld)<0)
+		return false;
+
+	// Arriving here, we know that the ray segment intersects the plan
+	return true;
 }
 
 bool Triangle::rayIntersect(const Ray &rayWorld, Intersection &its) const
 {
-	//// Compute the denominator of the tHit formula
-	//double denominator = dot(rayWorld.d, nWorld);
+	// Compute the denominator of the tHit formula
+ 	double denominator = dot(rayWorld.d, nWorld);
 
-	//// Test for parallel ray/plane
-	//if (std::abs(denominator) < Epsilon)
-	//	return false;
+	// If the denominator is very close to zero, then the ray and the
+	// plane are almost parallel
+	if (std::abs(denominator) < Epsilon)
+		return false;
 
-	//// Effectivelly compute the intersection distance
-	//double tHit = dot((p0World - rayWorld.o), nWorld) / denominator;
+	// Effectivelly compute the intersection point
+	double tHit = dot((pAWorld - rayWorld.o), nWorld) / denominator;
 
-	//// Is tHit outside the bounds of the ray segment we want to test intersecion with?
-	//if (tHit < rayWorld.minT || tHit > rayWorld.maxT)
-	//	return false;
+	// Is tHit outside the bounds of the ray segment we want to test intersecion with?
+	if (tHit < rayWorld.minT || tHit > rayWorld.maxT)
+		return false;
+	// Compute ray/plane the intersection point
+	Vector3D pHit = rayWorld.o + rayWorld.d * tHit;
 
-	//// Compute ray/plane the intersection point
-	//Vector3D pHit = rayWorld.o + rayWorld.d * tHit;
+	//To compute if the intersection is inside the triangle we assume the formula: 
+	//(vecAB x vecAPhit)*normal>0
+	Vector3D vecAB = pAWorld - pBWorld;
+	Vector3D vecApHit = pAWorld - pHit;
+	Vector3D vecBC = pBWorld - pCWorld;
+	Vector3D vecBpHit = pBWorld - pHit;
+	Vector3D vecCA = pCWorld - pAWorld;
+	Vector3D vecCpHit = pCWorld - pHit;
 
-	//// Fill the intersection details
-	//its.itsPoint = pHit;
-	//its.normal = nWorld;
-	//its.shape = this;
+	if (dot(cross(vecAB, vecApHit), nWorld)<0)
+		return false;
+	if (dot(cross(vecBC, vecBpHit), nWorld)<0)
+		return false;
+	if (dot(cross(vecCA, vecCpHit), nWorld)<0)
+		return false;
 
-	//// Update the ray maxT
-	//rayWorld.maxT = tHit;
+	// Fill the intersection details
+	its.itsPoint = pHit;
+	its.normal = nWorld;
+	its.shape = this;
 
-	//return true;
+	// Update the ray maxT
+	rayWorld.maxT = tHit;
+
+	return true;
 }
 
 
 
-
-std::string Triangle::toString() const
-{
-	std::stringstream s;
-	s << "\tInfinitePlan attributes: \n";
-
-	s << "\t p0 (world coordinates): " << p0World << "\n";
-	s << "\t normal (world coordinates): " << nWorld << "\n" << std::endl;
-
-	return s.str();
-}
 

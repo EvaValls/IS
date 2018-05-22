@@ -10,6 +10,7 @@
 
 #include "shapes/sphere.h"
 #include "shapes/infiniteplane.h"
+#include "shapes\triangle.h"
 
 #include "cameras/ortographic.h"
 #include "cameras/perspective.h"
@@ -48,7 +49,7 @@ void buildSceneSphere(Camera* &cam, Film* &film,
 	Material *redDiffuse = new PhongMaterial(Vector3D(0.7, 0.2, 0.3), Vector3D(0.7, 0.2, 0.3), 100);
 	Material *greenDiffuse = new PhongMaterial(Vector3D(0.2, 0.7, 0.3), Vector3D(0.2, 0.7, 0.3), 100);
 	Material *greyDiffuse = new PhongMaterial(Vector3D(0.8, 0, 0), Vector3D(0.8, 0.8, 0.8), 100);
-	Material *blueDiffuse = new PhongMaterial(Vector3D(0.3, 0.2, 0.7), Vector3D(0.3, 0.2, 0.7), 100);
+	Material *blueDiffuse = new PhongMaterial(Vector3D(0, 0, 0), Vector3D(0.3, 0.2, 0.7), 100);
 	Material *transmissive = new TransmissiveMaterial(1.1, Vector3D(1, 1, 1));
 	Material *mirror = new MirrorMaterial(Vector3D(1, 0.9, 0.85));
 	Material *red_100 = new PhongMaterial(Vector3D(0.7, 0.2, 0.3), Vector3D(0.7, 0.2, 0.3), 100);
@@ -97,7 +98,8 @@ void buildSceneSphere(Camera* &cam, Film* &film,
 	objectsList->push_back(bottomPlan);
 	objectsList->push_back(backPlan);
    
-
+	Shape *triangleOne = new Triangle(Vector3D(-1, -1,2), Vector3D(0, -1, 2), Vector3D(0.5, -2, 2),red_100);
+	objectsList->push_back(triangleOne);
     /* ****** */
     /* Lights */
     /* ****** */
