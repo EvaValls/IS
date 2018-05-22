@@ -11,6 +11,7 @@ Vector3D GlobalShader::computeColor(const Ray &r, const std::vector<Shape*> &obj
 	const std::vector<PointLightSource> &lsList) const {
 
 	Vector3D Lo = bgColor;
+	Vector3D Li;
 
 	// Get the current object
 	Intersection its;
@@ -34,11 +35,6 @@ Vector3D GlobalShader::computeColor(const Ray &r, const std::vector<Shape*> &obj
 			Lo = computeColor(reflectionRay, objList, lsList);
 		}
 		if (transmission) {
-			//const Material *m = &its.shape->getMaterial();
-
-
-
-
 
 			//Compute eta coeffs
 			double eta2 = its.shape->getMaterial().getIndexOfRefraction();
@@ -52,8 +48,9 @@ Vector3D GlobalShader::computeColor(const Ray &r, const std::vector<Shape*> &obj
 				n = -its.normal;
 				eta = eta1 / eta2;
 			}
-			else
+			else {
 				n = its.normal;
+			}
 			double cosThetaT;
 			bool hasTotalReflection = Utils::isTotalInternalReflection(eta, cosThetaI, cosThetaT);
 
@@ -72,7 +69,8 @@ Vector3D GlobalShader::computeColor(const Ray &r, const std::vector<Shape*> &obj
 		}
 		if (diffuse)
 		{
-			int nSamples = 8;
+			int nSamples = 5;
+			int bounces = maxDist;
 			Vector3D at = color;
 
 			for (int lsIndex = 0; lsIndex < lsList.size(); lsIndex++) {
@@ -87,9 +85,9 @@ Vector3D GlobalShader::computeColor(const Ray &r, const std::vector<Shape*> &obj
 				Ray rShadow(its.itsPoint, wi.normalized());
 				rShadow.maxT = wi.length();
 
-				Vector3D rf = its.shape->getMaterial().getReflectance(its.normal.normalized(), wo.normalized(), wi.normalized());
-
 				if (dot(its.normal, wi) > 0 && !Utils::hasIntersection(rShadow, objList)) {
+					Vector3D rf = its.shape->getMaterial().getReflectance(its.normal.normalized(), wo.normalized(), wi.normalized());
+
 					Lo += Utils::multiplyPerCanal(I, rf);
 				}
 			}
@@ -98,15 +96,20 @@ Vector3D GlobalShader::computeColor(const Ray &r, const std::vector<Shape*> &obj
 					Vector3D sampleDir = HemisphericalSampler::getSample(its.normal);
 					Vector3D rk = its.shape->getMaterial().getReflectance(its.normal.normalized(), sampleDir.normalized(), wo.normalized());
 					Ray rIndirect(its.itsPoint, sampleDir.normalized(), r.depth + 1);
-					Lo += Utils::multiplyPerCanal(computeColor(rIndirect, objList, lsList), rk);
+					Li += Utils::multiplyPerCanal(computeColor(rIndirect, objList, lsList), rk);
 				}
-				Lo /= 2 * 3.14*nSamples;
+				Li /= 2 * 3.14*nSamples;
+			}
+			else if(r.depth==bounces) {
+				Li = Utils::multiplyPerCanal(its.shape->getMaterial().getDiffuseCoefficient(), at);
 			}
 			else {
-				Lo+= Utils::multiplyPerCanal(its.shape->getMaterial().getDiffuseCoefficient(), at);
+				Ray rNormal(its.itsPoint, its.normal.normalized(), r.depth + 1);
+				Ray rReflect(its.itsPoint, Utils::computeReflectionDirection(r.d, its.normal.normalized()),r.depth + 1);
+				Li = (computeColor(rNormal, objList, lsList) + computeColor(rReflect, objList, lsList))/2 ;
 			}
 
 		}
 	}
-	return Lo;
+	return Lo+ Li;
 }

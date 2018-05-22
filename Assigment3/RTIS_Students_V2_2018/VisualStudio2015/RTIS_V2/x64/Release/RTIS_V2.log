@@ -1,7 +1,8 @@
-﻿  globalshader.cpp
+﻿  main.cpp
   Generando código
-  1 of 403 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
+  Generación de código finalizada
+  2 of 403 functions ( 0.5%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     19 functions had inline decision re-evaluated but remain unchanged
-  Generación de código finalizada
-LINK : fatal error LNK1201: error al escribir en la base de datos del programa 'C:\Users\u114262\Desktop\IS\Assigment3\RTIS_Students_V2_2018\VisualStudio2015\RTIS_V2\x64\Release\RTIS_V2.pdb'; compruebe si tiene suficiente espacio en disco, si la ruta es válida o si tiene privilegios suficientes
+  RTIS_V2.vcxproj -> C:\Users\u114264\Desktop\IS\Assigment3\RTIS_Students_V2_2018\VisualStudio2015\RTIS_V2\x64\Release\RTIS_V2.exe
+  RTIS_V2.vcxproj -> C:\Users\u114264\Desktop\IS\Assigment3\RTIS_Students_V2_2018\VisualStudio2015\RTIS_V2\x64\Release\RTIS_V2.pdb (Full PDB)

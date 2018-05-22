@@ -171,7 +171,7 @@ int main()
     //Shader *shader = new IntersectionShader (intersectionColor, bgColor);
 	//Shader *shader = new DepthShader(Vector3D(0.4, 1, 0.4), 8, bgColor);
 	//Shader *shader = new DirectShader(Vector3D(0.4, 1, 0.4), 8, bgColor);
-	Shader *shader = new GlobalShader(Vector3D(0.5, 0.5,0.5), 8, bgColor);
+	Shader *shader = new GlobalShader(Vector3D(0.3, 0.3,0.3),3, bgColor);
 
     // Declare pointers to all the variables which describe the scene
     Camera *cam;
