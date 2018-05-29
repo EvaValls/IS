@@ -107,7 +107,7 @@ void buildSceneSphere(Camera* &cam, Film* &film,
     /* ****** */
     //
     // ADD YOUR LIGHT SOURCES HERE
-Vector3D lightPosition1 = Vector3D(0, offset - 1, 2 * offset);
+	Vector3D lightPosition1 = Vector3D(0, offset - 1, 2 * offset);
 	Vector3D lightPosition2 = Vector3D(0, offset - 1, 0);
 	Vector3D lightPosition3 = Vector3D(0, offset - 1, offset);
 
@@ -147,6 +147,7 @@ void raytrace(Camera* &cam, Shader* &shader, Film* &film,
             double y = (double)(lin + 0.5) / resY;
 
             // Generate the camera ray
+
             Ray cameraRay = cam->generateRay(x, y);
 
             // Compute ray color according to the used shader
@@ -173,9 +174,9 @@ int main()
     Vector3D bgColor(0.0, 0.0, 0.0); // Background color (for rays which do not intersect anything)
     Vector3D intersectionColor(1,0,0);
     //Shader *shader = new IntersectionShader (intersectionColor, bgColor);
-	//Shader *shader = new DepthShader(Vector3D(0.4, 1, 0.4), 8, bgColor);
+	Shader *shader = new DepthShader(Vector3D(0.4, 1, 0.4), 8, bgColor);
 	//Shader *shader = new DirectShader(Vector3D(0.4, 1, 0.4), 8, bgColor);
-	Shader *shader = new GlobalShader(Vector3D(0.3, 0.3,0.3),3, bgColor);
+	//Shader *shader = new GlobalShader(Vector3D(0.3, 0.3,0.3),3, bgColor);
 
     // Declare pointers to all the variables which describe the scene
     Camera *cam;

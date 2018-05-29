@@ -47,7 +47,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -143,6 +143,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\cameras\camera.cpp" />
+    <ClCompile Include="..\..\src\cameras\DOFcamera.cpp" />
     <ClCompile Include="..\..\src\cameras\ortographic.cpp" />
     <ClCompile Include="..\..\src\cameras\perspective.cpp" />
     <ClCompile Include="..\..\src\core\bitmap.cpp" />
@@ -174,6 +175,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cameras\camera.h" />
+    <ClInclude Include="..\..\src\cameras\DOFcamera.h" />
     <ClInclude Include="..\..\src\cameras\ortographic.h" />
     <ClInclude Include="..\..\src\cameras\perspective.h" />
     <ClInclude Include="..\..\src\core\bitmap.h" />
