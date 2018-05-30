@@ -16,6 +16,7 @@ public:
 
     // Member functions
     virtual Ray generateRay(const double u, const double v) const;
+	virtual std::vector<Ray> generateMultipleRays(const double u, const double v) const;
     virtual Vector3D ndcToCameraSpace(const double u, const double v) const;
 };
 

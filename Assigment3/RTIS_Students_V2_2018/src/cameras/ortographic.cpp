@@ -47,3 +47,10 @@ Ray OrtographicCamera::generateRay(const double u, const double v) const
 
     return r;
 }
+
+std::vector<Ray> OrtographicCamera::generateMultipleRays(const double u, const double v) const {
+	std::vector<Ray> rays;
+	Ray r = generateRay(u,v);
+	rays.push_back(r);
+	return rays;
+}

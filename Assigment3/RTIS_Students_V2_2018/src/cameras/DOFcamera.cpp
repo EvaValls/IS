@@ -1,9 +1,9 @@
 #include "DOFcamera.h"
 
 DOFCamera::DOFCamera(const Matrix4x4 &cameraToWorld_, const double fov_, const double focalLength_, const double aperture_,
-	const Film &film_)
+	const Film &film_, const int &numRays_)
 	: Camera(cameraToWorld_, film_),
-	fov(fov_), focalLength(focalLength_), aperture(aperture_)
+	fov(fov_), focalLength(focalLength_), aperture(aperture_), numRays(numRays_),film(film_)
 { }
 
 Vector3D DOFCamera::ndcToCameraSpace(const double u, const double v) const
@@ -47,26 +47,25 @@ Ray DOFCamera::generateRay(const double u, const double v) const
 	return r;
 }
 
-Vector3D DOFCamera::computeP(Vector3D imagePlanePoint, Vector3D o) const {
+Vector3D DOFCamera::computeP(Vector3D rDirNorm, Vector3D o) const {
+	Vector3D P = o + rDirNorm*focalLength;
 	
-	//e is the camera position in world coordinates
-	Vector3D e = cameraToWorld.transformPoint(o); 
+	return P;
+}
+std::vector<Ray> DOFCamera::generateMultipleRays(const double u, const double v) const {
+	std::vector<Ray> rays;
+	Ray cameraRay = generateRay(u, v);
+	Vector3D imagePlanePoint = ndcToCameraSpace(u, v);
+	Vector3D rDir = imagePlanePoint - cameraRay.o;
+	Vector3D P = computeP(rDir, cameraRay.o);
 
-	
-	// d is the perpendicular distance from the camera to imagePlane
-	Vector3D d = ndcToCameraSpace(0.5, 0.5) - o;
-
-	// dPrima is the distance from the camera to the pixel
-	Vector3D dPrima = imagePlanePoint - o;
-
-	//v is the unit vector from camera to the pixel
-	Vector3D v = dPrima.normalized();
-
-	//We ar following the formula : P=e+(d'/(d/(d+f)))*v
-	Vector3D df = (d + focalLength);
-	Vector3D 
-	Vector3D P = e + dPrima**v / (d);
-	return  P;
-
-
+	for (int i = 0; i < numRays; i++) { // shooting N random rays
+		double apW = aperture / film.getWidth()*(double)(std::rand() / RAND_MAX) * 2 - 1;//generating random number
+		double apH = aperture / film.getHeight()*(double)(std::rand() / RAND_MAX) * 2 - 1;
+		Vector3D newRayCenter(imagePlanePoint.x + apW, imagePlanePoint.y + apH, imagePlanePoint.z);
+		Vector3D newRayDir = P - newRayCenter;
+		Ray newRay(newRayCenter, newRayDir.normalized());
+		rays.push_back(newRay);
+	}
+	return rays;
 }

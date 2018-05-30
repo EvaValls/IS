@@ -14,6 +14,7 @@
 
 #include "cameras/ortographic.h"
 #include "cameras/perspective.h"
+#include "cameras\DOFcamera.h"
 
 #include "shaders/intersectionshader.h"
 #include "shaders/depthshader.h"
@@ -40,8 +41,11 @@ void buildSceneSphere(Camera* &cam, Film* &film,
 	Matrix4x4 cameraToWorld = Matrix4x4::translate(Vector3D(0, 0, -3));
 	double fovDegrees = 60;
 	double fovRadians = Utils::degreesToRadians(fovDegrees);
-	cam = new PerspectiveCamera(cameraToWorld, fovRadians, *film);
-
+	//cam = new PerspectiveCamera(cameraToWorld, fovRadians, *film);
+	double focalLength = 35;
+	double aperture = 4;
+	int numRays = 8;
+	cam = new DOFCamera(cameraToWorld, fovRadians, focalLength, aperture,*film, numRays);
     /* ************************** */
     /* DEFINE YOUR MATERIALS HERE */
     /* ************************** */
@@ -130,7 +134,7 @@ void raytrace(Camera* &cam, Shader* &shader, Film* &film,
 
     size_t resX = film->getWidth();
     size_t resY = film->getHeight();
-
+	Vector3D pixelColor;
     // Main raytracing loop
     // Out-most loop invariant: we have rendered lin lines
     for(size_t lin=0; lin<resY; lin++)
@@ -142,17 +146,21 @@ void raytrace(Camera* &cam, Shader* &shader, Film* &film,
         // Inner loop invariant: we have rendered col columns
         for(size_t col=0; col<resX; col++)
         {
+			pixelColor = Vector3D(0, 0, 0);
             // Compute the pixel position in NDC
             double x = (double)(col + 0.5) / resX;
             double y = (double)(lin + 0.5) / resY;
 
             // Generate the camera ray
 
-            Ray cameraRay = cam->generateRay(x, y);
+            //Ray cameraRay = cam->generateRay(x, y);
+			std::vector<Ray> rays = cam->generateMultipleRays(x, y);
 
-            // Compute ray color according to the used shader
-            Vector3D pixelColor = shader->computeColor( cameraRay, *objectsList, *lightSourceList );
-
+			for (int i = 0; i < rays.size(); i++) {
+				// Compute ray color according to the used shader
+				 pixelColor+= shader->computeColor(rays[i], *objectsList, *lightSourceList);
+			}            
+			pixelColor /= rays.size();
             // Store the pixel color
             film->setPixelValue(col, lin, pixelColor);
         }
@@ -174,8 +182,8 @@ int main()
     Vector3D bgColor(0.0, 0.0, 0.0); // Background color (for rays which do not intersect anything)
     Vector3D intersectionColor(1,0,0);
     //Shader *shader = new IntersectionShader (intersectionColor, bgColor);
-	Shader *shader = new DepthShader(Vector3D(0.4, 1, 0.4), 8, bgColor);
-	//Shader *shader = new DirectShader(Vector3D(0.4, 1, 0.4), 8, bgColor);
+	//Shader *shader = new DepthShader(Vector3D(0.4, 1, 0.4), 8, bgColor);
+	Shader *shader = new DirectShader(Vector3D(0.4, 1, 0.4), 8, bgColor);
 	//Shader *shader = new GlobalShader(Vector3D(0.3, 0.3,0.3),3, bgColor);
 
     // Declare pointers to all the variables which describe the scene
