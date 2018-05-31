@@ -42,8 +42,8 @@ void buildSceneSphere(Camera* &cam, Film* &film,
 	double fovDegrees = 60;
 	double fovRadians = Utils::degreesToRadians(fovDegrees);
 	//cam = new PerspectiveCamera(cameraToWorld, fovRadians, *film);
-	double focalLength =5.5;
-	double aperture = 50;
+	double focalLength =3.5;
+	double aperture = 80;
 	int numRays = 20;
 	cam = new DOFCamera(cameraToWorld, fovRadians, focalLength, aperture,*film, numRays);
     /* ************************** */
