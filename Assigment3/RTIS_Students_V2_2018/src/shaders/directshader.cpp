@@ -20,29 +20,19 @@ Vector3D DirectShader::computeColor(const Ray &r, const std::vector<Shape*> &obj
 	if (intersects) {
 		//Viewing direction
 		Vector3D wo = -r.d;
-		
-		//Phong Material of the object 
-		/*const Material *m = &its.shape->getMaterial();
-		
-		const PhongMaterial* pm = dynamic_cast<const PhongMaterial*>(m);*/
+
 		bool specular = its.shape->getMaterial().hasSpecular();
 		bool diffuse = its.shape->getMaterial().hasDiffuseOrGlossy();
 		bool transmission = its.shape->getMaterial().hasTransmission();
 
 		if (specular) {
-			//const Material *m = &its.shape->getMaterial();
 
-			//const TransmissiveMaterial* mm = dynamic_cast<const TransmissiveMaterial*>(m);
 			Vector3D wr = Utils::computeReflectionDirection(r.d, its.normal);
 			Ray reflectionRay(its.itsPoint, wr.normalized(), r.depth+1);
 			Lo = computeColor(reflectionRay, objList, lsList);
 		}
 		if (transmission) {
-			//const Material *m = &its.shape->getMaterial();
-			
 
-			
-		
 				
 			//Compute eta coeffs
 			double eta2= its.shape->getMaterial().getIndexOfRefraction();

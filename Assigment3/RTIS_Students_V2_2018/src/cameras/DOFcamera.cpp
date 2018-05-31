@@ -56,15 +56,21 @@ std::vector<Ray> DOFCamera::generateMultipleRays(const double u, const double v)
 	std::vector<Ray> rays;
 	Ray cameraRay = generateRay(u, v);
 	Vector3D imagePlanePoint = ndcToCameraSpace(u, v);
-	Vector3D rDir = imagePlanePoint - cameraRay.o;
-	Vector3D P = computeP(rDir, cameraRay.o);
+	//Vector3D rDir = imagePlanePoint - cameraRay.o;
+	//Vector3D P = computeP(rDir, imagePlanePoint);
+	Vector3D P = computeP(cameraRay.d, imagePlanePoint);
 
 	for (int i = 0; i < numRays; i++) { // shooting N random rays
-		double apW = aperture / film.getWidth()*(double)(std::rand() / RAND_MAX) * 2 - 1;//generating random number
-		double apH = aperture / film.getHeight()*(double)(std::rand() / RAND_MAX) * 2 - 1;
-		Vector3D newRayCenter(imagePlanePoint.x + apW, imagePlanePoint.y + apH, imagePlanePoint.z);
+		double randomW = (double)(std::rand()) / RAND_MAX *2 - 1; //generating random number
+		double randomH = (double)(std::rand()) / RAND_MAX * 2 - 1;
+		double apW = aperture*randomW / film.getWidth();
+		double apH = aperture*randomH / film.getHeight();
+		Vector3D imagePlaneAperture = ndcToCameraSpace(u+apW,v+apH);
+		Vector3D newRayCenter(imagePlaneAperture.x, imagePlaneAperture.y, imagePlaneAperture.z);
+		//Vector3D newRayCenter(imagePlanePoint.x + apW, imagePlanePoint.y + apH, imagePlanePoint.z);
 		Vector3D newRayDir = P - newRayCenter;
 		Ray newRay(newRayCenter, newRayDir.normalized());
+		newRay = cameraToWorld.transformRay(newRay);
 		rays.push_back(newRay);
 	}
 	return rays;

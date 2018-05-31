@@ -42,9 +42,9 @@ void buildSceneSphere(Camera* &cam, Film* &film,
 	double fovDegrees = 60;
 	double fovRadians = Utils::degreesToRadians(fovDegrees);
 	//cam = new PerspectiveCamera(cameraToWorld, fovRadians, *film);
-	double focalLength = 35;
-	double aperture = 4;
-	int numRays = 8;
+	double focalLength =5.5;
+	double aperture = 50;
+	int numRays = 20;
 	cam = new DOFCamera(cameraToWorld, fovRadians, focalLength, aperture,*film, numRays);
     /* ************************** */
     /* DEFINE YOUR MATERIALS HERE */
@@ -70,7 +70,7 @@ void buildSceneSphere(Camera* &cam, Film* &film,
     Matrix4x4 sphereTransform1;
 	double radius = 1;
 	sphereTransform1 = Matrix4x4::translate(Vector3D(-offset + radius, -offset + radius, 3.5));
-	Shape *s1 = new Sphere(1.5, sphereTransform1, mirror);
+	Shape *s1 = new Sphere(1.5, sphereTransform1, greyDiffuse);
 
     // Define and place a sphere
     Matrix4x4 sphereTransform2;
