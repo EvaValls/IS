@@ -48,8 +48,8 @@ Ray DOFCamera::generateRay(const double u, const double v) const
 }
 
 Vector3D DOFCamera::computeP(Vector3D rDirNorm, Vector3D o) const {
-	Vector3D P = o + rDirNorm*focalLength;
 	
+	Vector3D P = o + rDirNorm*(2+focalLength);
 	return P;
 }
 std::vector<Ray> DOFCamera::generateMultipleRays(const double u, const double v) const {
@@ -63,8 +63,8 @@ std::vector<Ray> DOFCamera::generateMultipleRays(const double u, const double v)
 	for (int i = 0; i < numRays; i++) { // shooting N random rays
 		double randomW = (double)(std::rand()) / RAND_MAX *2 - 1; //generating random number
 		double randomH = (double)(std::rand()) / RAND_MAX * 2 - 1;
-		double apW = aperture*0.5*randomW / film.getWidth();
-		double apH = aperture*0.5*randomH / film.getHeight();
+		double apW = aperture*randomW / film.getWidth();
+		double apH = aperture*randomH / film.getHeight();
 		Vector3D imagePlaneAperture = ndcToCameraSpace(u+apW,v+apH);
 		Vector3D newRayCenter(imagePlaneAperture.x, imagePlaneAperture.y, imagePlaneAperture.z);
 		//Vector3D newRayCenter(imagePlanePoint.x + apW, imagePlanePoint.y + apH, imagePlanePoint.z);

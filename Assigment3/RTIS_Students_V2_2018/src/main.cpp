@@ -42,8 +42,8 @@ void buildSceneSphere(Camera* &cam, Film* &film,
 	double fovDegrees = 60;
 	double fovRadians = Utils::degreesToRadians(fovDegrees);
 	//cam = new PerspectiveCamera(cameraToWorld, fovRadians, *film);
-	double focalLength =3.5;
-	double aperture = 80;
+	double focalLength =0.5;
+	double aperture = 30;
 	int numRays = 20;
 	cam = new DOFCamera(cameraToWorld, fovRadians, focalLength, aperture,*film, numRays);
     /* ************************** */
@@ -74,7 +74,7 @@ void buildSceneSphere(Camera* &cam, Film* &film,
 
     // Define and place a sphere
     Matrix4x4 sphereTransform2;
-	sphereTransform2 = Matrix4x4::translate(Vector3D(1.0, 0.0, 2));
+	sphereTransform2 = Matrix4x4::translate(Vector3D(1.0, 0.0, 0.5));
 	Shape *s2 = new Sphere(1, sphereTransform2, transmissive);
 
     // Define and place a sphere
@@ -97,7 +97,6 @@ void buildSceneSphere(Camera* &cam, Film* &film,
 	Shape *topPlan = new InfinitePlane(Vector3D(0, offset, 0), Vector3D(0, -1, 0), greyDiffuse);
 	Shape *bottomPlan = new InfinitePlane(Vector3D(0, -offset, 0), Vector3D(0, 1, 0), greyDiffuse);
 	Shape *backPlan = new InfinitePlane(Vector3D(0, 0, 3 * offset), Vector3D(0, 0, -1), blueDiffuse);
-
 	objectsList->push_back(leftPlan);
 	objectsList->push_back(rightPlan);
 	objectsList->push_back(topPlan);
