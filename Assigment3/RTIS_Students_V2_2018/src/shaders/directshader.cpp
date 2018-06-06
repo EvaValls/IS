@@ -91,3 +91,25 @@ Vector3D DirectShader::computeColor(const Ray &r, const std::vector<Shape*> &obj
 	
 	return Lo;
 }
+double DirectShader::computeDistance(const Ray &r, const std::vector<Shape*> &objList, const double &focalLength) const {
+	
+	double dist = -1;
+	double minDist = INFINITY;
+	for (size_t objIndex = 0; objIndex < objList.size(); objIndex++)
+	{
+		// Get the current object
+		Intersection its;
+		const Shape *obj = objList.at(objIndex);
+		if (obj->getMaterial().hasTransmission()) continue;
+
+		bool intersects = obj->rayIntersect(r, its);
+		
+		if (intersects) {
+			double dist = abs(focalLength - its.itsPoint.z);
+			if (dist < minDist) {
+				minDist = dist;
+			}
+		}
+	}
+	return minDist;
+}

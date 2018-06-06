@@ -30,7 +30,8 @@
 
 void buildSceneSphere(Camera* &cam, Film* &film,
                       std::vector<Shape*>* &objectsList,
-                      std::vector<PointLightSource>* &lightSourceList)
+                      std::vector<PointLightSource>* &lightSourceList,
+					  double focalLength)
 {
     /* **************************** */
     /* Declare and place the camera */
@@ -42,10 +43,9 @@ void buildSceneSphere(Camera* &cam, Film* &film,
 	double fovDegrees = 60;
 	double fovRadians = Utils::degreesToRadians(fovDegrees);
 	//cam = new PerspectiveCamera(cameraToWorld, fovRadians, *film);
-	double focalLength =0.5;
+
 	double aperture = 30;
-	int numRays = 20;
-	cam = new DOFCamera(cameraToWorld, fovRadians, focalLength, aperture,*film, numRays);
+	cam = new DOFCamera(cameraToWorld, fovRadians, focalLength, aperture,*film);
     /* ************************** */
     /* DEFINE YOUR MATERIALS HERE */
     /* ************************** */
@@ -70,7 +70,7 @@ void buildSceneSphere(Camera* &cam, Film* &film,
     Matrix4x4 sphereTransform1;
 	double radius = 1;
 	sphereTransform1 = Matrix4x4::translate(Vector3D(-offset + radius, -offset + radius, 3.5));
-	Shape *s1 = new Sphere(1.5, sphereTransform1, greyDiffuse);
+	Shape *s1 = new Sphere(1.5, sphereTransform1, mirror);
 
     // Define and place a sphere
     Matrix4x4 sphereTransform2;
@@ -127,7 +127,7 @@ void buildSceneSphere(Camera* &cam, Film* &film,
 }
 
 void raytrace(Camera* &cam, Shader* &shader, Film* &film,
-              std::vector<Shape*>* &objectsList, std::vector<PointLightSource>* &lightSourceList)
+              std::vector<Shape*>* &objectsList, std::vector<PointLightSource>* &lightSourceList, double focalLength)
 {
     unsigned int sizeBar = 40;
 
@@ -152,16 +152,22 @@ void raytrace(Camera* &cam, Shader* &shader, Film* &film,
 
             // Generate the camera ray
 
-            //Ray cameraRay = cam->generateRay(x, y);
-			std::vector<Ray> rays = cam->generateMultipleRays(x, y);
+            Ray cameraRay = cam->generateRay(x, y);
+			double dist = shader->computeDistance(cameraRay, *objectsList, focalLength);
+			int numRays = (int)log2(dist+1 )* 400 + 20;
+			
+			if (dist >= 0) {
+				std::vector<Ray> rays = cam->generateMultipleRays(x, y, numRays);
 
-			for (int i = 0; i < rays.size(); i++) {
-				// Compute ray color according to the used shader
-				 pixelColor+= shader->computeColor(rays[i], *objectsList, *lightSourceList);
-			}            
-			pixelColor /= rays.size();
-            // Store the pixel color
-            film->setPixelValue(col, lin, pixelColor);
+
+				for (int i = 0; i < rays.size(); i++) {
+					// Compute ray color according to the used shader
+					pixelColor += shader->computeColor(rays[i], *objectsList, *lightSourceList);
+				}
+				pixelColor /= rays.size();
+				// Store the pixel color
+				film->setPixelValue(col, lin, pixelColor);
+			}
         }
     }
 }
@@ -189,12 +195,12 @@ int main()
     Camera *cam;
     std::vector<Shape*> *objectsList;
     std::vector<PointLightSource> *lightSourceList;
-
+	double focalLength = 0.5;
     // Build the scene
-    buildSceneSphere(cam, film, objectsList, lightSourceList);
+    buildSceneSphere(cam, film, objectsList, lightSourceList, focalLength);
 
     // Launch some rays!
-    raytrace(cam, shader, film, objectsList, lightSourceList);
+    raytrace(cam, shader, film, objectsList, lightSourceList, focalLength);
 
     // Save the final result to file
     std::cout << "\n\nSaving the result to file output.bmp\n" << std::endl;

@@ -1,9 +1,9 @@
 #include "DOFcamera.h"
 
 DOFCamera::DOFCamera(const Matrix4x4 &cameraToWorld_, const double fov_, const double focalLength_, const double aperture_,
-	const Film &film_, const int &numRays_)
+	const Film &film_)
 	: Camera(cameraToWorld_, film_),
-	fov(fov_), focalLength(focalLength_), aperture(aperture_), numRays(numRays_),film(film_)
+	fov(fov_), focalLength(focalLength_), aperture(aperture_),film(film_)
 { }
 
 Vector3D DOFCamera::ndcToCameraSpace(const double u, const double v) const
@@ -52,7 +52,7 @@ Vector3D DOFCamera::computeP(Vector3D rDirNorm, Vector3D o) const {
 	Vector3D P = o + rDirNorm*(2+focalLength);
 	return P;
 }
-std::vector<Ray> DOFCamera::generateMultipleRays(const double u, const double v) const {
+std::vector<Ray> DOFCamera::generateMultipleRays(const double u, const double v, int numRays) const {
 	std::vector<Ray> rays;
 	Ray cameraRay = generateRay(u, v);
 	Vector3D imagePlanePoint = ndcToCameraSpace(u, v);

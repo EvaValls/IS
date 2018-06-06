@@ -46,7 +46,7 @@ Ray PerspectiveCamera::generateRay(const double u, const double v) const
 
     return r;
 }
-std::vector<Ray> PerspectiveCamera::generateMultipleRays(const double u, const double v) const {
+std::vector<Ray> PerspectiveCamera::generateMultipleRays(const double u, const double v, int numRays) const {
 	std::vector<Ray> rays;
 	Ray r = generateRay(u, v);
 	rays.push_back(r);

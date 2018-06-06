@@ -12,7 +12,7 @@ public:
     virtual Vector3D computeColor(const Ray &r,
                              const std::vector<Shape*> &objList,
                              const std::vector<PointLightSource> &lsList) const;
-
+	virtual double computeDistance(const Ray &r, const std::vector<Shape*> &objList, const double &focalLength) const=0;
 private:
     double maxDist; // Used to store the value of the maximum distance which can be visualized
     Vector3D color; // Used to store the visualization color

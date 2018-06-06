@@ -15,7 +15,7 @@ public:
     // device coordinates (NDC), returns a ray in WORLD COORDINATES which passes
     // through (u, v)
     virtual Ray generateRay(const double u, const double v) const = 0;
-	virtual std::vector<Ray> generateMultipleRays(const double u, const double v) const = 0;
+	virtual std::vector<Ray> generateMultipleRays(const double u, const double v, int numRays) const = 0;
     virtual Vector3D ndcToCameraSpace(const double u, const double v) const = 0;
 
     /* ******************* */

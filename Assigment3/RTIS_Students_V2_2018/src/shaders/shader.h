@@ -17,7 +17,7 @@ public:
     virtual Vector3D computeColor(const Ray &r,
                              const std::vector<Shape*> &objList,
                              const std::vector<PointLightSource> &lsList) const = 0;
-
+	virtual double computeDistance(const Ray &r, const std::vector<Shape*> &objList, const double &focalLength) const=0;
     Vector3D bgColor;
 };
 
