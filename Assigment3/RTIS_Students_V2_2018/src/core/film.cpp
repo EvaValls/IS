@@ -68,3 +68,14 @@ int Film::save()
 {
     return BitMap::save(data, width, height);
 }
+void Film::division(double value) {
+
+	for (size_t lin = 0; lin < height; lin++)
+	{
+		// Inner loop invariant: we have rendered col columns
+		for (size_t col = 0; col < width; col++)
+		{
+			data[lin][col] /= value;
+		}
+	}
+}

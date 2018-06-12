@@ -8,7 +8,7 @@ class Triangle : public Shape
 public:
 	Triangle() = delete;
 	Triangle(const Vector3D &pA_, const Vector3D &pB_, const Vector3D &pC_,
-		Material *mat_);
+		Material *mat_, double speed_, Vector3D motionDir_);
 
 	// Get the normal at a surface point in world coordinates
 	Vector3D getNormalWorld() const;
@@ -16,6 +16,7 @@ public:
 	// Ray/plane intersection methods
 	virtual bool rayIntersect(const Ray &ray, Intersection &its) const;
 	virtual bool rayIntersectP(const Ray &ray) const;
+	virtual void changePosition() {  };
 
 	// Convert triangle to String
 	std::string toString() const;

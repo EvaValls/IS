@@ -2,9 +2,9 @@
 
 OrtographicCamera::OrtographicCamera(const Matrix4x4 &cameraToWorld_,
                   //const double nearClip_, const double farClip_,
-                  const Film &film_ )
+                  const Film &film_ , double expositionTime_)
     //: Camera(cameraToWorld_, nearClip_, farClip_, film_)
-    : Camera(cameraToWorld_, film_)
+    : Camera(cameraToWorld_, film_, expositionTime_)
 {
     // Build the necessary transforms
 //    Vector3D delta(-1.0, -1.0, 0);

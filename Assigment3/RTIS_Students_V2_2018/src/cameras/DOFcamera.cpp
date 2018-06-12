@@ -1,8 +1,8 @@
 #include "DOFcamera.h"
 
 DOFCamera::DOFCamera(const Matrix4x4 &cameraToWorld_, const double fov_, const double focalLength_, const double aperture_,
-	const Film &film_)
-	: Camera(cameraToWorld_, film_),
+	const Film &film_, double expositionTime_)
+	: Camera(cameraToWorld_, film_, expositionTime_),
 	fov(fov_), focalLength(focalLength_), aperture(aperture_),film(film_)
 { }
 

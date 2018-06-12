@@ -42,10 +42,10 @@ void buildSceneSphere(Camera* &cam, Film* &film,
 	Matrix4x4 cameraToWorld = Matrix4x4::translate(Vector3D(0, 0, -3));
 	double fovDegrees = 60;
 	double fovRadians = Utils::degreesToRadians(fovDegrees);
-	//cam = new PerspectiveCamera(cameraToWorld, fovRadians, *film);
+	cam = new PerspectiveCamera(cameraToWorld, fovRadians, *film, 10);
 
 	double aperture = 30;
-	cam = new DOFCamera(cameraToWorld, fovRadians, focalLength, aperture,*film);
+	//cam = new DOFCamera(cameraToWorld, fovRadians, focalLength, aperture,*film, 3);
     /* ************************** */
     /* DEFINE YOUR MATERIALS HERE */
     /* ************************** */
@@ -70,18 +70,18 @@ void buildSceneSphere(Camera* &cam, Film* &film,
     Matrix4x4 sphereTransform1;
 	double radius = 1;
 	sphereTransform1 = Matrix4x4::translate(Vector3D(-offset + radius, -offset + radius, 3.5));
-	Shape *s1 = new Sphere(1.5, sphereTransform1, mirror);
-
+	Shape *s1 = new Sphere(1.5, sphereTransform1, mirror, 0.1, Vector3D(1, 0, 0));
+	
     // Define and place a sphere
     Matrix4x4 sphereTransform2;
 	sphereTransform2 = Matrix4x4::translate(Vector3D(1.0, 0.0, 0.5));
-	Shape *s2 = new Sphere(1, sphereTransform2, transmissive);
+	Shape *s2 = new Sphere(1, sphereTransform2, transmissive, 0, Vector3D(0, 0, 0));
 
     // Define and place a sphere
     Matrix4x4 sphereTransform3;
 	radius = 1;
 	sphereTransform3 = Matrix4x4::translate(Vector3D(0.3, -offset + radius, 5));
-	Shape *s3 = new Sphere(radius, sphereTransform3, red_100);
+	Shape *s3 = new Sphere(radius, sphereTransform3, red_100,0, Vector3D(0,0,0));
 
 	// Store the objects in the object list
 	objectsList->push_back(s1);
@@ -92,18 +92,18 @@ void buildSceneSphere(Camera* &cam, Film* &film,
 	Matrix4x4 idTransform;
 	// Construct the Cornell Box
 	
-	Shape *leftPlan = new InfinitePlane(Vector3D(-offset, 0, 0), Vector3D(1, 0, 0), redDiffuse);
-	Shape *rightPlan = new InfinitePlane(Vector3D(offset, 0, 0), Vector3D(-1, 0, 0), greenDiffuse);
-	Shape *topPlan = new InfinitePlane(Vector3D(0, offset, 0), Vector3D(0, -1, 0), greyDiffuse);
-	Shape *bottomPlan = new InfinitePlane(Vector3D(0, -offset, 0), Vector3D(0, 1, 0), greyDiffuse);
-	Shape *backPlan = new InfinitePlane(Vector3D(0, 0, 3 * offset), Vector3D(0, 0, -1), blueDiffuse);
+	Shape *leftPlan = new InfinitePlane(Vector3D(-offset, 0, 0), Vector3D(1, 0, 0), redDiffuse, 0, Vector3D(0, 0, 0));
+	Shape *rightPlan = new InfinitePlane(Vector3D(offset, 0, 0), Vector3D(-1, 0, 0), greenDiffuse, 0, Vector3D(0, 0, 0));
+	Shape *topPlan = new InfinitePlane(Vector3D(0, offset, 0), Vector3D(0, -1, 0), greyDiffuse, 0, Vector3D(0, 0, 0));
+	Shape *bottomPlan = new InfinitePlane(Vector3D(0, -offset, 0), Vector3D(0, 1, 0), greyDiffuse, 0, Vector3D(0, 0, 0));
+	Shape *backPlan = new InfinitePlane(Vector3D(0, 0, 3 * offset), Vector3D(0, 0, -1), blueDiffuse, 0, Vector3D(0, 0, 0));
 	objectsList->push_back(leftPlan);
 	objectsList->push_back(rightPlan);
 	objectsList->push_back(topPlan);
 	objectsList->push_back(bottomPlan);
 	objectsList->push_back(backPlan);
    
-	Shape *triangleOne = new Triangle(Vector3D(-1, -1,2), Vector3D(0, -1, 2), Vector3D(0.5, -2, 2),red_100);
+	Shape *triangleOne = new Triangle(Vector3D(-1, -1,2), Vector3D(0, -1, 2), Vector3D(0.5, -2, 2),red_100, 0, Vector3D(0, 0, 0));
 	objectsList->push_back(triangleOne);
     /* ****** */
     /* Lights */
@@ -136,40 +136,53 @@ void raytrace(Camera* &cam, Shader* &shader, Film* &film,
 	Vector3D pixelColor;
     // Main raytracing loop
     // Out-most loop invariant: we have rendered lin lines
-    for(size_t lin=0; lin<resY; lin++)
-    {
-        // Show progression
-        if ( lin%(resY/sizeBar) == 0)
-            std::cout << ".";
+	double vt = 3;
+	for (int t = 0; t < vt*cam->expositionTime; t++) {
+		for (size_t lin = 0; lin < resY; lin++)
+		{
+			// Show progression
+			if (lin % (resY / sizeBar) == 0)
+				std::cout << ".";
 
-        // Inner loop invariant: we have rendered col columns
-        for(size_t col=0; col<resX; col++)
-        {
-			pixelColor = Vector3D(0, 0, 0);
-            // Compute the pixel position in NDC
-            double x = (double)(col + 0.5) / resX;
-            double y = (double)(lin + 0.5) / resY;
+			// Inner loop invariant: we have rendered col columns
+			for (size_t col = 0; col < resX; col++)
+			{
+				pixelColor = Vector3D(0, 0, 0);
+				// Compute the pixel position in NDC
+				double x = (double)(col + 0.5) / resX;
+				double y = (double)(lin + 0.5) / resY;
 
-            // Generate the camera ray
+				// Generate the camera ray
 
-            Ray cameraRay = cam->generateRay(x, y);
-			double dist = shader->computeDistance(cameraRay, *objectsList, focalLength);
-			int numRays = (int)log2(dist+1 )* 400 + 20;
-			
-			if (dist >= 0) {
-				std::vector<Ray> rays = cam->generateMultipleRays(x, y, numRays);
+				Ray cameraRay = cam->generateRay(x, y);
+				double dist = shader->computeDistance(cameraRay, *objectsList, focalLength);
+				int numRays = (int)log2(dist + 1) * 400 + 20;
+
+				if (dist >= 0) {
+					std::vector<Ray> rays = cam->generateMultipleRays(x, y, numRays);
 
 
-				for (int i = 0; i < rays.size(); i++) {
-					// Compute ray color according to the used shader
-					pixelColor += shader->computeColor(rays[i], *objectsList, *lightSourceList);
+					for (int i = 0; i < rays.size(); i++) {
+						// Compute ray color according to the used shader
+						pixelColor += shader->computeColor(rays[i], *objectsList, *lightSourceList);
+					}
+					pixelColor /= rays.size();
+					// Store the pixel color
+					Vector3D currentColor = film->getPixelValue(col, lin)+pixelColor;
+					
+					film->setPixelValue(col, lin, currentColor);
 				}
-				pixelColor /= rays.size();
-				// Store the pixel color
-				film->setPixelValue(col, lin, pixelColor);
 			}
-        }
-    }
+		}
+		for (size_t objIndex = 0; objIndex < objectsList->size(); objIndex++) {
+			if (objectsList->at(objIndex)->getSpeed() != 0) {
+				objectsList->at(objIndex)->changePosition();
+			}
+			
+
+		}
+	}
+	film->division(vt*cam->expositionTime);
 }
 
 int main()

@@ -31,6 +31,7 @@ public:
     // Other functions
     int save();
     void clearData();
+	void division(double value);
 
 private:
     // Image size

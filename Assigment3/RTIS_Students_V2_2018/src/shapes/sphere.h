@@ -11,7 +11,7 @@ class Sphere : public Shape
 {
 public:
     Sphere() = delete;
-    Sphere(const double radius_, const Matrix4x4 &t, Material *material_);
+    Sphere(const double radius_, Matrix4x4 &t, Material *material_, double speed_, Vector3D motionDir_);
 
     Vector3D getNormalWorld(const Vector3D &pt_world) const;
 
@@ -19,6 +19,7 @@ public:
     virtual bool rayIntersectP(const Ray &ray) const;
 
     std::string toString() const;
+	virtual void changePosition();
 
 private:
     // The center of the sphere in local coordinates is assumed

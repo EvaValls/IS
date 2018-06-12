@@ -9,7 +9,7 @@ public:
 	DOFCamera() = delete;
 
 	DOFCamera(const Matrix4x4 &cameraToWorld_, const double fov_, const double focalLength_, const double aperture_,
-		const Film &film_);
+		const Film &film_, double expositionTime_);
 
 	// Member functions
 	virtual Ray generateRay(const double u, const double v) const;

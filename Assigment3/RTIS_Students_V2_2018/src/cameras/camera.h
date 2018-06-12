@@ -9,7 +9,7 @@ class Camera
 {
 public:
     Camera() = delete;
-    Camera(const Matrix4x4 &cameraToWorld_, const Film &film_);
+    Camera(const Matrix4x4 &cameraToWorld_, const Film &film_, double expositionTime_);
 
     // Given image plane coordinates (u, v) = [0,1]x[0,1] in normalized
     // device coordinates (NDC), returns a ray in WORLD COORDINATES which passes
@@ -29,6 +29,7 @@ public:
     const Film &film;
     // Aspect (based on the film size)
     double aspect;
+	double expositionTime;
 };
 
 #endif // CAMERA_H

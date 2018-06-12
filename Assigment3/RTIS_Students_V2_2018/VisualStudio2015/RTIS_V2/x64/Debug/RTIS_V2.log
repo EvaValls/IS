@@ -1,18 +1,27 @@
-﻿  shader.cpp
+﻿  triangle.cpp
+  sphere.cpp
+  shape.cpp
+  infiniteplane.cpp
+  shader.cpp
   normalshader.cpp
   intersectionshader.cpp
   globalshader.cpp
 c:\users\u114264\desktop\is\assigment3\rtis_students_v2_2018\src\shaders\globalshader.cpp(73): warning C4244: 'inicializando': conversión de 'const double' a 'int'; posible pérdida de datos
   directshader.cpp
   depthshader.cpp
+  transmissivematerial.cpp
+c:\users\u114264\desktop\is\assigment3\rtis_students_v2_2018\src\materials\transmissivematerial.cpp(30): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+c:\users\u114264\desktop\is\assigment3\rtis_students_v2_2018\src\materials\transmissivematerial.cpp(33): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+c:\users\u114264\desktop\is\assigment3\rtis_students_v2_2018\src\materials\transmissivematerial.cpp(34): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
   main.cpp
-c:\users\u114264\desktop\is\assigment3\rtis_students_v2_2018\src\main.cpp(167): warning C4244: 'argumento': conversión de 'unsigned __int64' a 'const double'; posible pérdida de datos
+c:\users\u114264\desktop\is\assigment3\rtis_students_v2_2018\src\main.cpp(168): warning C4244: 'argumento': conversión de 'unsigned __int64' a 'const double'; posible pérdida de datos
+  utils.cpp
+  film.cpp
   perspective.cpp
   ortographic.cpp
   camera.cpp
   DOFcamera.cpp
   Generando código...
-c:\users\u114264\desktop\is\assigment3\rtis_students_v2_2018\src\shaders\directshader.cpp(109): warning C4715: 'DirectShader::computeDistance': no todas las rutas de acceso de control devuelven un valor
   LINK : no se encontró C:\Users\u114264\Desktop\IS\Assigment3\RTIS_Students_V2_2018\VisualStudio2015\RTIS_V2\x64\Debug\RTIS_V2.exe o no lo generó el último vínculo incremental; ejecutando vínculo completo
   RTIS_V2.vcxproj -> C:\Users\u114264\Desktop\IS\Assigment3\RTIS_Students_V2_2018\VisualStudio2015\RTIS_V2\x64\Debug\RTIS_V2.exe
   RTIS_V2.vcxproj -> C:\Users\u114264\Desktop\IS\Assigment3\RTIS_Students_V2_2018\VisualStudio2015\RTIS_V2\x64\Debug\RTIS_V2.pdb (Full PDB)

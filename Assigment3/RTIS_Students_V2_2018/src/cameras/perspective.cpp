@@ -1,8 +1,8 @@
 #include "perspective.h"
 
 PerspectiveCamera::PerspectiveCamera(const Matrix4x4 &cameraToWorld_, const double fov_,
-                const Film &film_ )
-    : Camera(cameraToWorld_, film_),
+                const Film &film_ , double expositionTime_)
+    : Camera(cameraToWorld_, film_, expositionTime_),
       fov(fov_)
 { }
 

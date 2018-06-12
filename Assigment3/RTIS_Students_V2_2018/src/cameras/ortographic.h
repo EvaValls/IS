@@ -12,7 +12,7 @@ public:
     OrtographicCamera() = delete;
 
     OrtographicCamera(const Matrix4x4 &cameraToWorld_,
-                      const Film &film_ );
+                      const Film &film_ , double expositionTime_);
 
     // Member functions
     virtual Ray generateRay(const double u, const double v) const;

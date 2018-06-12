@@ -1,7 +1,7 @@
 ﻿  main.cpp
-..\..\src\main.cpp(167): warning C4244: 'argumento': conversión de 'unsigned __int64' a 'const double'; posible pérdida de datos
+..\..\src\main.cpp(169): warning C4244: 'argumento': conversión de 'unsigned __int64' a 'const double'; posible pérdida de datos
   Generando código
-  1 of 487 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
+  3 of 494 functions ( 0.6%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   Generación de código finalizada

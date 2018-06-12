@@ -9,7 +9,7 @@ public:
     PerspectiveCamera() = delete;
 
     PerspectiveCamera(const Matrix4x4 &cameraToWorld_, const double fov,
-                const Film &film_ );
+                const Film &film_ , double expositionTime_);
 
     // Member functions
     virtual Ray generateRay(const double u, const double v) const;

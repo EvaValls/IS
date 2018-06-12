@@ -11,7 +11,7 @@ class Shape
 {
 public:
     Shape() = delete;
-    Shape(const Matrix4x4 &t_, Material *material_);
+    Shape(Matrix4x4 &t_, Material *material_, double speed_, Vector3D motionDir_);
 
     // Pure virtual function makes this class Abstract class.
 
@@ -21,11 +21,16 @@ public:
 
     // Return the material associated with the shape
     const Material& getMaterial() const;
+	const double getSpeed() const;
+	const Vector3D getMotionDirection() const;
+	virtual void changePosition();
 
 protected:
     Matrix4x4 objectToWorld;
     Matrix4x4 worldToObject;
     Material *material;
+	Vector3D motionDir;
+	double speed;
 };
 
 #endif // SHAPE_H

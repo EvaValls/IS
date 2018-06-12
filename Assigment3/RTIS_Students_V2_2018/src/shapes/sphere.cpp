@@ -1,7 +1,7 @@
 #include "sphere.h"
 
-Sphere::Sphere(const double radius_, const Matrix4x4 &t_, Material *material_)
-    : Shape(t_, material_), radius(radius_)
+Sphere::Sphere(const double radius_, Matrix4x4 &t_, Material *material_, double speed_, Vector3D motionDir_)
+    : Shape(t_, material_,speed_, motionDir_), radius(radius_)
 { }
 
 // Return the normal in world coordinates
@@ -167,4 +167,14 @@ std::ostream& operator<<(std::ostream &out, const Sphere &s)
 {
     out << s.toString();
     return out;
+}
+
+void Sphere::changePosition() {
+	Matrix4x4 sphereTransform(0, 0 ,0 , speed*motionDir.x,
+							  0, 0, 0, speed*motionDir.y,
+							  0, 0, 0, speed*motionDir.z,
+							  0, 0, 0, 0);
+	objectToWorld = objectToWorld + sphereTransform;
+
+	objectToWorld.inverse(worldToObject);
 }

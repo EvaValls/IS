@@ -1,8 +1,8 @@
 #include "triangle.h"
 
 Triangle::Triangle(const Vector3D &pA_, const Vector3D &pB_, const Vector3D &pC_,
-	Material *mat_) :
-	Shape(Matrix4x4(), mat_),
+	Material *mat_, double speed_, Vector3D motionDir_) :
+	Shape(Matrix4x4(), mat_, speed_, motionDir_),
 	pAWorld(pA_), pBWorld(pB_), pCWorld(pC_), nWorld(cross(pA_-pB_,pA_-pC_).normalized())
 { }
 
