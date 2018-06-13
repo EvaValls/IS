@@ -42,10 +42,18 @@ void buildSceneSphere(Camera* &cam, Film* &film,
 	Matrix4x4 cameraToWorld = Matrix4x4::translate(Vector3D(0, 0, -3));
 	double fovDegrees = 60;
 	double fovRadians = Utils::degreesToRadians(fovDegrees);
-	cam = new PerspectiveCamera(cameraToWorld, fovRadians, *film, 10);
+	/* ************************** */
+	/* CAMERAS */
+	/* ************************** */
+	///CAMERAS NOW VILL HAVE EXPOSURE TIME
+	double expTime = 8, expTimeDoF=3;
+	cam = new PerspectiveCamera(cameraToWorld, fovRadians, *film, expTime);
 
+	///	DoF camera whit an aperture
 	double aperture = 30;
-	//cam = new DOFCamera(cameraToWorld, fovRadians, focalLength, aperture,*film, 3);
+	//cam = new DOFCamera(cameraToWorld, fovRadians, focalLength, aperture, *film, expTimeDoF);
+
+
     /* ************************** */
     /* DEFINE YOUR MATERIALS HERE */
     /* ************************** */
@@ -62,6 +70,7 @@ void buildSceneSphere(Camera* &cam, Film* &film,
     /* ******* */
     /* Objects */
     /* ******* */
+	///SHAPES WILL HAVE A VELOCITY and A DIRECTION
     // Create a heterogeneous list of objects of type shape
     // (some might be triangles, other spheres, plans, etc)
     objectsList = new std::vector<Shape*>;
@@ -70,7 +79,7 @@ void buildSceneSphere(Camera* &cam, Film* &film,
     Matrix4x4 sphereTransform1;
 	double radius = 1;
 	sphereTransform1 = Matrix4x4::translate(Vector3D(-offset + radius, -offset + radius, 3.5));
-	Shape *s1 = new Sphere(1.5, sphereTransform1, mirror, 0.1, Vector3D(1, 0, 0));
+	Shape *s1 = new Sphere(1.5, sphereTransform1, greyDiffuse, 0.02, Vector3D(1, 0, 0));
 	
     // Define and place a sphere
     Matrix4x4 sphereTransform2;
@@ -135,9 +144,10 @@ void raytrace(Camera* &cam, Shader* &shader, Film* &film,
     size_t resY = film->getHeight();
 	Vector3D pixelColor;
     // Main raytracing loop
-    // Out-most loop invariant: we have rendered lin lines
+	///Loop to compute the severl images of the exposition time to compute motion blur
 	double vt = 3;
-	for (int t = 0; t < vt*cam->expositionTime; t++) {
+	for (int t = 0; t <= vt*cam->expositionTime; t++) {
+		// Out-most loop invariant: we have rendered lin lines
 		for (size_t lin = 0; lin < resY; lin++)
 		{
 			// Show progression
@@ -152,15 +162,18 @@ void raytrace(Camera* &cam, Shader* &shader, Film* &film,
 				double x = (double)(col + 0.5) / resX;
 				double y = (double)(lin + 0.5) / resY;
 
-				// Generate the camera ray
-
+				// Generate the camera ray to compute the distance
 				Ray cameraRay = cam->generateRay(x, y);
+
+				///computing distance between intersectionPoint and focalPlane
 				double dist = shader->computeDistance(cameraRay, *objectsList, focalLength);
+				
+				///Changing dinamicaly the num of rays depending on the distance to compute the pixel color
 				int numRays = (int)log2(dist + 1) * 400 + 20;
 
-				if (dist >= 0) {
-					std::vector<Ray> rays = cam->generateMultipleRays(x, y, numRays);
+				if (dist >= 0) {  //If the ray intersects with an object
 
+					std::vector<Ray> rays = cam->generateMultipleRays(x, y, numRays);
 
 					for (int i = 0; i < rays.size(); i++) {
 						// Compute ray color according to the used shader
@@ -174,6 +187,7 @@ void raytrace(Camera* &cam, Shader* &shader, Film* &film,
 				}
 			}
 		}
+		///if an object has speed -> change its position acording to its speed
 		for (size_t objIndex = 0; objIndex < objectsList->size(); objIndex++) {
 			if (objectsList->at(objIndex)->getSpeed() != 0) {
 				objectsList->at(objIndex)->changePosition();
@@ -182,7 +196,8 @@ void raytrace(Camera* &cam, Shader* &shader, Film* &film,
 
 		}
 	}
-	film->division(vt*cam->expositionTime);
+	//This is the sum of all colours and we have to divide to make the mean
+	film->division(vt*cam->expositionTime+1);
 }
 
 int main()
@@ -208,7 +223,7 @@ int main()
     Camera *cam;
     std::vector<Shape*> *objectsList;
     std::vector<PointLightSource> *lightSourceList;
-	double focalLength = 0.5;
+	double focalLength = 3.5;
     // Build the scene
     buildSceneSphere(cam, film, objectsList, lightSourceList, focalLength);
 

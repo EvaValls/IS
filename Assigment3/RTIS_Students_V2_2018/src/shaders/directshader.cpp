@@ -100,10 +100,12 @@ double DirectShader::computeDistance(const Ray &r, const std::vector<Shape*> &ob
 		// Get the current object
 		Intersection its;
 		const Shape *obj = objList.at(objIndex);
+		//If material has transmission we need more rays even is in the focal plane
 		if (obj->getMaterial().hasTransmission()) continue;
 
 		bool intersects = obj->rayIntersect(r, its);
-		
+
+		//Get the object with minumum distance to the focalLength
 		if (intersects) {
 			double dist = abs(focalLength - its.itsPoint.z);
 			if (dist < minDist) {
